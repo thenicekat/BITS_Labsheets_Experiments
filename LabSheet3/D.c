@@ -38,13 +38,13 @@ Node* addToList(Node* head, int val){
 
 Node* readList(FILE* file){
     int num;
-    fscanf(file, "%d", &num);
+    fscanf(file, "%lld", &num);
 
     Node* head = NULL;
 
     for(int i=0; i<num; i++){
         int temp;
-        fscanf(file, "%d", &temp);
+        fscanf(file, "%lld", &temp);
         if(head == NULL) head = addToList(head, temp);
         else{
             addToList(head, temp);
@@ -57,7 +57,7 @@ Node* readList(FILE* file){
 Node* printList(Node* head){
     Node* cur = head;
     while(cur != NULL){
-        printf("%d ", cur->data);
+        printf("%lld ", cur->data);
         cur = cur->next;
     }
     printf("\n");
@@ -70,7 +70,7 @@ Node* printListReverse(Node* head){
     }
 
     while(cur != NULL){
-        printf("%d ", cur->data);
+        printf("%lld ", cur->data);
         cur = cur->prev;
     }
     printf("\n");
@@ -116,7 +116,7 @@ void splitTeams(Node* head){
 
     }
 
-    printf("%d %d", maxLeft, maxRight);
+    printf("%lld %lld", maxLeft, maxRight);
 }
 
 void main(){

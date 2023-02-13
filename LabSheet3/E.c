@@ -55,7 +55,7 @@ Node* printList(Node* head){
     printf("\n");
 }
 
-Node* printCircularList(Node* head, int n){
+Node* reorder(Node* head, int n){
     int counter = 0;
     Node* counterHead = head;
     while(counterHead != NULL){
@@ -63,17 +63,24 @@ Node* printCircularList(Node* head, int n){
         counterHead = counterHead->next;
     }
 
-    Node* cur = head;
-    for(int i=0; i<counter-n; i++){
-        cur = cur->next;
+    n = n%counter;
+
+    Node* temp = head;
+    while(temp->next != NULL){ temp = temp->next; }
+    temp->next = head;
+    head->prev = temp;
+
+    temp = head;
+    for(int i=0; i<counter-n-1; i++){
+        temp = temp->next;
     }
 
-    for(int i=0; i<counter; i++){
-        printf("%d ", cur->data);
-        if(cur->next != NULL) cur = cur->next;
-        else cur = head;
-    }
-    printf("\n");
+    head = temp->next;
+    head->prev->next = NULL;
+    head->prev = NULL;
+
+    return head;
+
 }
 
 
@@ -85,5 +92,6 @@ void main(){
 
     Node* head = readList(file);
     
-    printCircularList(head, shift);
+    head = reorder(head, shift);
+    printList(head);
 }

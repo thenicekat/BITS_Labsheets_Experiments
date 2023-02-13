@@ -110,7 +110,7 @@ void splitTeams(Node *head)
 
     while (left != right)
     {
-        printf("%d %d\n", leftSum, rightSum);
+        // printf("%d %d\n", leftSum, rightSum);
         if (leftSum == rightSum)
         {
             maxLeft = max(leftC, maxLeft);
@@ -152,6 +152,6 @@ void main()
 {
     FILE *file = fopen("D.txt", "r");
     Node *input = readList(file);
-    printList(input);
+    // printList(input);
     splitTeams(input);
 }

@@ -22,15 +22,15 @@ void main(){
 
     int maxS = INT_MIN;
 
-    while(start + 1< end){
+    while(start <= end){
         int mid = (start + end)/2;
 
         if(input[mid] < maxN){
             maxS = max(maxS, input[mid]);
-            start = mid;
+            start = mid + 1;
         }
         else{
-            end = mid;
+            end = mid - 1;
         }
     }
 

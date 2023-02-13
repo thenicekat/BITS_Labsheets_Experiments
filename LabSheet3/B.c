@@ -33,7 +33,7 @@ Song *addSong(Song *head, int val)
     }
 }
 
-Song *readSongs(FILE* file)
+Song *readSongs(FILE *file)
 {
     int num;
     fscanf(file, "%d", &num);
@@ -82,29 +82,37 @@ Song *printSongsReverse(Song *head)
     printf("\n");
 }
 
-Song* forward(Song *head)
+Song *forward(Song *head)
 {
     if (head->next != NULL)
         head = head->next;
     return head;
 }
 
-Song* previous(Song *head)
+Song *previous(Song *head)
 {
     if (head->prev != NULL)
         head = head->prev;
     return head;
 }
 
-Song* playNext(FILE* file, Song* head, Song* curr){
+Song *playNext(FILE *file, Song *head, Song *curr)
+{
     int val;
     fscanf(file, "%d", &val);
 
-    //Search for it in playlist
-    Song* temp = head;
+    if(head == NULL){
+        Song *newSong = createSong(val);
+        head = newSong;
+    }
+
+    // Search for it in playlist
+    Song *temp = head;
     int found = 0;
-    while(temp->next != NULL){
-        if(temp->data == val){
+    while (temp->next != NULL)
+    {
+        if (temp->data == val)
+        {
             found = 1;
             // a b c d
             // a b d
@@ -112,11 +120,11 @@ Song* playNext(FILE* file, Song* head, Song* curr){
             temp->prev->next = temp->next;
             temp->next->prev = temp->prev;
 
-            //a | b d
-            // Separate all songs
-            Song* rest = curr->next;
+            // a | b d
+            //  Separate all songs
+            Song *rest = curr->next;
 
-            //a | c b d
+            // a | c b d
             temp->next = rest;
             rest->prev = temp;
 
@@ -124,35 +132,53 @@ Song* playNext(FILE* file, Song* head, Song* curr){
             temp->prev = curr;
             curr->next = temp;
             break;
-        }else{
+        }
+        else
+        {
             temp = temp->next;
         }
     }
 
-    if(found == 0){
-        Song* newSong = createSong(val);
-        Song* tempNext = curr->next;
-        curr->next = newSong;
-        newSong->prev = curr;
-        newSong->next = tempNext;
-        tempNext->prev = newSong;
+    if (found == 0)
+    {
+        Song *newSong = createSong(val);
+        if (curr->next == NULL)
+            curr->next = newSong;
+        else
+        {
+            Song *tempNext = curr->next;
+            curr->next = newSong;
+            newSong->prev = curr;
+            newSong->next = tempNext;
+            tempNext->prev = newSong;
+        }
     }
 }
 
 void main()
 {
-    FILE* file = fopen("B.txt", "r");
+    FILE *file = fopen("B.txt", "r");
     Song *head = readSongs(file);
-    Song* curr = head;
+    Song *curr = head;
 
     int operation;
     while (fscanf(file, "%d", &operation))
     {
+        printSongs(head);
+        printf("----> Performing Operation: %d\n", operation);
         if (operation == 1)
         {
             int song;
             fscanf(file, "%d", &song);
-            addSong(head, song);
+            if (head == NULL)
+            {
+                head = addSong(head, song);
+                curr = head;
+            }
+            else
+            {
+                addSong(head, song);
+            }
         }
         else if (operation == 2)
         {
@@ -166,10 +192,12 @@ void main()
         {
             curr = previous(curr);
         }
-        else if(operation == 5){
+        else if (operation == 5)
+        {
             break;
         }
-        else if(operation == 6){
+        else if (operation == 6)
+        {
             playNext(file, head, curr);
         }
     }

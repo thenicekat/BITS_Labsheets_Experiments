@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
+#define radix 10
 #define int long long int
 
 int max(int a, int b)
@@ -26,7 +27,7 @@ void main()
 
     // We need to find the max number of iterations in terms of digits
     int temp = maxNumber;
-    int counter = log10(maxNumber) + 1;
+    int counter = log(maxNumber)/log(radix) + 1;
     printf("We have %lld iterations\n", counter);
 
     int tracker = 1;
@@ -34,11 +35,11 @@ void main()
     // Then we start iterating
     for (int i = 0; i < counter; i++)
     {
-        int array[10];
+        int array[radix];
         int answer[number];
 
         // Initializing array to 0
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < radix; i++)
         {
             array[i] = 0;
         }
@@ -47,12 +48,12 @@ void main()
         for (int i = 0; i < number; i++)
         {
             int temp = input[i] / tracker;
-            array[temp % 10]++;
+            array[temp % radix]++;
         }
 
         // Make prefix sum array
         int x = 0;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < radix; i++)
         {
             x += array[i];
             array[i] = x;
@@ -62,8 +63,8 @@ void main()
         for (int i = number - 1; i >= 0; i--)
         {
             int temp = input[i] / tracker;
-            answer[array[temp % 10] - 1] = input[i];
-            array[temp % 10]--;
+            answer[array[temp % radix] - 1] = input[i];
+            array[temp % radix]--;
         }
 
         for (int i = 0; i < number; i++)
@@ -73,6 +74,6 @@ void main()
         }
 
         printf("\n");
-        tracker *= 10;
+        tracker *= radix;
     }
 }

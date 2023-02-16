@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 #define int long long int
 
@@ -25,12 +26,7 @@ void main()
 
     // We need to find the max number of iterations in terms of digits
     int temp = maxNumber;
-    int counter = 0;
-    while (temp > 0)
-    {
-        counter++;
-        temp /= 10;
-    }
+    int counter = log10(maxNumber) + 1;
     printf("We have %lld iterations\n", counter);
 
     int tracker = 1;

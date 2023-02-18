@@ -32,41 +32,21 @@ void main()
         maxNumber = max(maxNumber, input[i]);
     }
 
-    int answer = 0;
-    for(int i=0; i<number; i++){
-        int gcdWithoutI = input[i+1];
-        for(int j=0; j<number; j++){
-            if(j != i) gcdWithoutI = gcd(input[j], gcdWithoutI);
+    if (number == 1)
+        printf("%lld", input[0]);
+    else
+    {
+        int answer = 0;
+        for (int i = 0; i < number; i++)
+        {
+            int gcdWithoutI = input[i + 1];
+            for (int j = 0; j < number; j++)
+            {
+                if (j != i)
+                    gcdWithoutI = gcd(input[j], gcdWithoutI);
+            }
+            answer = max(answer, gcdWithoutI);
         }
-        answer = max(answer, gcdWithoutI);
+        printf("%lld", answer);
     }
-    printf("%lld", answer);
-
-    // // Counting the number of numbers in the input
-    // int countingArray[maxNumber + 1];
-    // for (int i = 0; i <= maxNumber; i++)
-    // {
-    //     countingArray[i] = 0;
-    // }
-    // for (int i = 0; i < number; i++)
-    // {
-    //     countingArray[input[i]]++;
-    // }
-
-    // // Put only some numbers in the input array
-    // int tracker = 0;
-    // for (int i = 0; i <= maxNumber; i++)
-    // {
-    //     for (int k = 0; k < countingArray[i]; k++)
-    //     {
-    //         input[tracker] = i;
-    //         tracker++;
-    //     }
-    // }
-
-    // // Print only the sorted array
-    // for (int i = 0; i < number; i++)
-    // {
-    //     printf("%lld ", input[i]);
-    // }
 }

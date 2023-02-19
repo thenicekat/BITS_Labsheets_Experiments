@@ -9,20 +9,19 @@ void main()
     FILE *file;
     file = fopen("2B.txt", "r");
 
-    int numH, maxElem = 0;
+    int numH;
     fscanf(file, "%d", &numH);
 
     int input[numH];
     for (int i = 0; i < numH; i++)
     {
         fscanf(file, "%d", &input[i]);
-        maxElem = max(maxElem, input[i]);
     }
 
     int answer = 0;
 
     int left = 0;
-    int right = maxElem;
+    int right = numH;
 
     while (left <= right)
     {
@@ -31,11 +30,15 @@ void main()
         int score = 0;
         for (int i = 0; i < numH; i++)
         {
-            if(input[i] >= mid) score++;
+            if (input[i] >= mid)
+                score++;
         }
 
-        if(score == mid) answer = max(answer, mid);
-
+        if (score == mid)
+        {
+            answer = max(answer, mid);
+        }
+        
         if (score < mid)
         {
             right = mid - 1;

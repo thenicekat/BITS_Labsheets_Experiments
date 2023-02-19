@@ -2,11 +2,13 @@
 
 #define int long long int
 
+// Maximum function
 int max(int a, int b)
 {
     return a > b ? a : b;
 }
 
+// GCD function
 int gcd(int a, int b)
 {
     if (a == 0)
@@ -32,6 +34,7 @@ void main()
         maxNumber = max(maxNumber, input[i]);
     }
 
+    // Edge case for number = 1
     if (number == 1)
         printf("%lld", input[0]);
     else

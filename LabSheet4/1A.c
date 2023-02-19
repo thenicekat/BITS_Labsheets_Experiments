@@ -9,16 +9,21 @@ typedef struct entry
 
 void mergeLists(Entry** entries, int start, int mid, int end)
 {
+    // We have a left pointer, right pointer
+    // Start pointer to add the elements
     int left = 0;
     int right = 0;
     int tracker = start;
 
+    // Length of the left side and the right side
     int lengthOfEntries1 = mid - start + 1;
     int lengthOfEntries2 = end - mid;
 
+    // We make an array of entries and sort them
     Entry* entries1[mid - start + 1];
     Entry* entries2[end - mid];
 
+    // We store these in temporary places
     for (int i = 0; i < lengthOfEntries1; i++)
         entries1[i] = entries[start + i];
 
@@ -59,8 +64,13 @@ void mergeLists(Entry** entries, int start, int mid, int end)
 
 void sortLists(Entry** entries, int start, int end)
 {
+    // Loop until start > end
     if (start < end)
     {
+        // You find the midpoint
+        // Sort the left and right separately
+        // Then you merge the lists
+        // In the merge function you call using start, mid and end
         int mid = (start + end) / 2;
         sortLists(entries, start, mid);
         sortLists(entries, mid + 1, end);
@@ -84,6 +94,8 @@ void main()
     int num;
     fscanf(file, "%d", &num);
 
+    // We make a struct to track both the number
+    // We take input using malloc
     Entry* entries[num];
     for (int i = 0; i < num; i++)
     {
@@ -96,15 +108,22 @@ void main()
         entries[i] = newEntry;
     }
 
+    // We call the sorting function from 0 to end
     sortLists(entries, 0, num-1);
-    // printEntries(entries, num);
 
+    // We keep track of last entry's end time
     int lastExit = entries[0]->end;
     int answerIndex = 1;
 
+    // We create an array for results
     Entry* answerEntries[num];
     answerEntries[0] = entries[0];
 
+    // We loop and check if the next element's start is less then 
+    // Current elements end
+    // Then if yes, we replace the end with max of curr element's end and
+    // next element's end
+    // Same with last exit
     for (int i = 1; i < num; i++)
     {
         if (entries[i]->start <= lastExit)

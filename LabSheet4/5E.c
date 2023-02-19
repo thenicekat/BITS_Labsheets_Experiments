@@ -19,6 +19,9 @@ void main()
     int a, b;
     fscanf(file, "%lld %lld", &a, &b);
 
+    // In this function we are trying to find the maximum coprime
+    // Concept is we keep dividing common numbers
+    // Until nothing else is possible
     while(gcd(a, b) != 1){
         a /= gcd(a, b);
     }

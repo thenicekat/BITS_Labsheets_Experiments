@@ -109,12 +109,13 @@ void main()
     {
         if (entries[i]->start <= lastExit)
         {
-            answerEntries[answerIndex-1]->end = entries[i]->end;
+            answerEntries[answerIndex-1]->end = max(lastExit, entries[i]->end);
+            lastExit = max(lastExit, entries[i]->end);
         }
         else
         {
             answerEntries[answerIndex] = entries[i];
-            lastExit = entries[i]->start;
+            lastExit = max(lastExit, entries[i]->end);
             answerIndex++;
         }
     }

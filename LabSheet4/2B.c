@@ -1,5 +1,3 @@
-// https://www.geeksforgeeks.org/maximum-length-possible-by-cutting-n-given-woods-into-at-least-k-pieces/
-
 #include <stdio.h>
 
 int max(int a, int b) { return a > b ? a : b; }

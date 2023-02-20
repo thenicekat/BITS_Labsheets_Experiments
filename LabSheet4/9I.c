@@ -23,27 +23,27 @@ void main()
     FILE *file;
     file = fopen("9I.txt", "r");
 
-    int number, maxNumber = 0;
-    fscanf(file, "%lld", &number);
+    int numberOfElements, maxNumber = 0;
+    fscanf(file, "%lld", &numberOfElements);
 
     // Taking input from user
-    int input[number];
-    for (int i = 0; i < number; i++)
+    int input[numberOfElements];
+    for (int i = 0; i < numberOfElements; i++)
     {
         fscanf(file, "%lld", &input[i]);
         maxNumber = max(maxNumber, input[i]);
     }
 
-    // Edge case for number = 1
-    if (number == 1)
+    // Edge case for numberOfElements = 1
+    if (numberOfElements == 1)
         printf("%lld", input[0]);
     else
     {
         int answer = 0;
-        for (int i = 0; i < number; i++)
+        for (int i = 0; i < numberOfElements; i++)
         {
             int gcdWithoutI = input[i + 1];
-            for (int j = 0; j < number; j++)
+            for (int j = 0; j < numberOfElements; j++)
             {
                 if (j != i)
                     gcdWithoutI = gcd(input[j], gcdWithoutI);

@@ -12,7 +12,6 @@ void main()
 
     // Max Case is when all except room has 1 king and other room has the remaining 
     int maxKingsPerRoomMax = kings - halls + 1;
-    int maxKingsPerRoomMin = 1;
     int maxAnswer = maxKingsPerRoomMax * (maxKingsPerRoomMax - 1) / 2;
 
     // Min Case is when the kings are as close to each other as possible

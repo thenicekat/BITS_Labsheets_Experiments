@@ -20,6 +20,9 @@ void main(){
     // if b%6 = n and a%6 = n then (b-a)%6 = 0
     // Which gives us a sub array whose sum is a multiple of 6
 
+    // So we find reminders for all the elements in the prefix sum
+    // And if 2 numbers have same reminders, we get 1 set so we use nC2 formula
+
     int reminders[mult];
     for(int i=0; i<mult; i++) reminders[i] = 0;
 

@@ -43,7 +43,7 @@ void main()
     if(n%2 == 0){
         XOR_b = 0;
     }else{
-        for(int i = 0; i<n; i++){
+        for(int i = 0; i<m; i++){
             XOR_b ^= arraym[i];
         }
     }

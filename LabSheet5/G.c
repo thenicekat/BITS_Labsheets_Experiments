@@ -2,11 +2,13 @@
 
 #define int long long int
 
+// We have a minimum function to find minimum value
 int min(int a, int b)
 {
     return a > b ? b : a;
 }
 
+// We have a maximum function to find maximum value
 int max(int a, int b)
 {
     return a < b ? b : a;
@@ -14,6 +16,7 @@ int max(int a, int b)
 
 void recursiveMinimumUnfairness(int *buckets, int *answer, int noOfPeople, int index, int* finalAnswer)
 {
+    // If we passed through all the chicken buckets, then we return the minimum maximum
     if (index == -1)
     {
         int temp = 0;
@@ -23,6 +26,7 @@ void recursiveMinimumUnfairness(int *buckets, int *answer, int noOfPeople, int i
         return;
     }
 
+    // For each person, we add chicken, recurse and then remove that chicken and check again
     for (int i = 0; i < noOfPeople; i++)
     {
         answer[i] += buckets[index];
@@ -35,22 +39,27 @@ void recursiveMinimumUnfairness(int *buckets, int *answer, int noOfPeople, int i
 
 void main()
 {
+    // Taking input
     FILE *file;
     file = fopen("G.txt", "r");
 
     int buckets, people;
     fscanf(file, "%lld %lld", &buckets, &people);
 
+    // Taking buckets input
     int bucketsInput[buckets];
     for (int i = 0; i < buckets; i++)
         fscanf(file, "%lld", &bucketsInput[i]);
 
+    // We take an empty array with 0s and allot these as people and chicken per person
     int answer[people];
     for (int i = 0; i < people; i++)
         answer[i] = 0;
 
+    // Final Answer to ensure we get minimum answer
     int finalAnswer = 100000000000;
 
+    // Call a recursive function
     recursiveMinimumUnfairness(bucketsInput, answer, people, buckets - 1, &finalAnswer);
 
     printf("%lld", finalAnswer);

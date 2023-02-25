@@ -28,7 +28,7 @@ void main(){
 
         int answer = 0;
         while(end < num && start <= end){
-            // printf("%lld %lld %lld %lld\n", start, end, noOfZeroes, end - start + 1);
+            printf("%lld %lld %lld %lld\n", start, end, noOfZeroes, end - start + 1);
             if(noOfZeroes == noOfZ){
                 answer = max(answer, end - start + 1);
             }

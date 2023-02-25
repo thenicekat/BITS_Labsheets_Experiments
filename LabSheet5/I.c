@@ -22,7 +22,17 @@ void main()
     while (left <= right && right < inputLength)
     {
         if (noOfOddNeeded == noOfOddsFound)
+        {
+            printf("%lld %lld\n", left, right);
             counter++;
+            while (right + 1 < inputLength && input[right + 1] % 2 != 1)
+            {
+                printf("%lld %lld\n", left, right + 1);
+                counter++;
+                right++;
+            }
+        }
+
         if (noOfOddsFound < noOfOddNeeded)
         {
             right++;

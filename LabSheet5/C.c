@@ -21,6 +21,7 @@ void main()
     int answer = 0;
     for (int start = 0; start < len - alphabet + 1; start++)
     {
+        printf("%lld, %lld ", start, end);
         // Initializing array to 0
         for (int i = 0; i < alphabet; i++)
         {

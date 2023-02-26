@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define int long long int
 
@@ -24,7 +25,6 @@ void main(){
     // And if 2 numbers have same reminders, we get 1 set so we use nC2 formula
 
     int reminders[mult];
-    for(int i=0; i<mult; i++) reminders[i] = 0;
 
     int sum = 0;
     for(int i=0; i<numOfInputs; i++){
@@ -34,6 +34,14 @@ void main(){
         sum += input[i];
         // We update array with cumulative sums
         input[i] = sum;
+    }
+
+    for(int i=0; i<numOfInputs; i++){
+        // We update reminders array with mods
+        reminders[sum % mult] = 0;
+    }
+
+    for(int i=0; i<numOfInputs; i++){
         // We update reminders array with mods
         reminders[sum % mult]++;
     }

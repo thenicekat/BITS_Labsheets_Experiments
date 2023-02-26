@@ -14,15 +14,12 @@ int max(int a, int b)
     return a < b ? b : a;
 }
 
-void recursiveMinimumUnfairness(int *buckets, int *answer, int noOfPeople, int index, int* finalAnswer)
+void recursiveMinimumUnfairness(int *buckets, int *answer, int noOfPeople, int index, int* finalAnswer, int currmax)
 {
     // If we passed through all the chicken buckets, then we return the minimum maximum
     if (index == -1)
     {
-        int temp = 0;
-        for (int i = 0; i < noOfPeople; i++)
-            temp = max(answer[i], temp);
-        (*finalAnswer) = min((*finalAnswer), temp);
+        (*finalAnswer) = min((*finalAnswer), currmax);
         return;
     }
 
@@ -30,7 +27,7 @@ void recursiveMinimumUnfairness(int *buckets, int *answer, int noOfPeople, int i
     for (int i = 0; i < noOfPeople; i++)
     {
         answer[i] += buckets[index];
-        recursiveMinimumUnfairness(buckets, answer, noOfPeople, index - 1, finalAnswer);
+        recursiveMinimumUnfairness(buckets, answer, noOfPeople, index - 1, finalAnswer, max(answer[i], currmax));
         answer[i] -= buckets[index];
     }
 
@@ -60,7 +57,7 @@ void main()
     int finalAnswer = 100000000000;
 
     // Call a recursive function
-    recursiveMinimumUnfairness(bucketsInput, answer, people, buckets - 1, &finalAnswer);
+    recursiveMinimumUnfairness(bucketsInput, answer, people, buckets - 1, &finalAnswer, 0);
 
     printf("%lld", finalAnswer);
 }

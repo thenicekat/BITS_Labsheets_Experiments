@@ -39,8 +39,17 @@ void main(){
     }
 
     int answer = reminders[0];
-    for(int i=0; i<mult; i++){
-        if(reminders[i] > 1) answer += ((reminders[i])*(reminders[i]-1)/2);
+    // This was one method of doing it but it becomes O(k)
+    // for(int i=0; i<mult; i++){
+    //     if(reminders[i] > 1) answer += ((reminders[i])*(reminders[i]-1)/2);
+    // }
+
+    // To do it in O(n)
+    for(int i=0; i<numOfInputs; i++){
+        if(reminders[input[i] % mult] > 1){
+            answer += (reminders[input[i] % mult])*(reminders[input[i] % mult] - 1)/2;
+            reminders[input[i] % mult] = 0;
+        }
     }
 
     printf("The number of subarrays: %lld", answer);

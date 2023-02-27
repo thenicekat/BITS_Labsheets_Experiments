@@ -16,25 +16,20 @@ void main()
 
     int alphabetStore[alphabet];
 
-    int end = alphabet;
+    int start = 0;
+    int end = 0;
 
-    int answer = 0;
-    for (int start = 0; start < len - alphabet + 1; start++)
+    // Initializing array to 0
+    for (int i = 0; i < alphabet; i++)
     {
-        printf("%lld, %lld ", start, end);
-        // Initializing array to 0
-        for (int i = 0; i < alphabet; i++)
-        {
-            alphabetStore[i] = 0;
-        }
+        alphabetStore[i] = 0;
+    }
 
-        // Reading characters in the current window
-        for (int i = start; i < end; i++)
-        {
-            if ((input[i] - 'a') < alphabet)
-                alphabetStore[input[i] - 'a']++;
-        }
-
+    alphabetStore[input[0]-'a']++;
+    
+    int answer = 0;
+    while (end < len)
+    {
         // Checking if it satisfies all the letters
         int counter = 0;
         for (int i = 0; i < alphabet; i++)
@@ -42,14 +37,19 @@ void main()
             if (alphabetStore[i] > 0)
                 counter++;
         }
+
         if (counter == alphabet)
         {
-            answer += len - end + 1;
+            answer += len - end;
+            alphabetStore[input[start] - 'a']--;
+            start++;
         }
-
-        // Incrementing end
-        end++;
+        else
+        {
+            end++;
+            alphabetStore[input[end] - 'a']++;
+        }
     }
 
-    printf("%lld", answer);
+    printf("\n%lld", answer);
 }

@@ -1,2 +1,2 @@
-6 4
-abaabc
+6 2
+abbaab

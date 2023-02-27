@@ -11,41 +11,54 @@ void main()
     fscanf(file, "%lld %lld", &inputLength, &noOfOddNeeded);
 
     int input[inputLength];
+
+    // We count the number of odd numbers
+    int noOfOdds = 0;
     for (int i = 0; i < inputLength; i++)
+    {
         fscanf(file, "%lld", &input[i]);
 
-    int left = 0;
-    int right = 0;
-    int noOfOddsFound = input[0] % 2 == 1 ? 1 : 0;
+        if (input[i] % 2 == 1)
+            noOfOdds++;
+    }
 
-    int counter = 0;
-    while (left <= right && right < inputLength)
+    // We keep track of odd indices
+    int oddIndices[noOfOdds], c = 0;
+    for (int i = 0; i < inputLength; i++)
     {
-        if (noOfOddNeeded == noOfOddsFound)
+        if (input[i] % 2 == 1)
         {
-            printf("%lld %lld\n", left, right);
-            counter++;
-            while (right + 1 < inputLength && input[right + 1] % 2 != 1)
-            {
-                printf("%lld %lld\n", left, right + 1);
-                counter++;
-                right++;
-            }
-        }
-
-        if (noOfOddsFound < noOfOddNeeded)
-        {
-            right++;
-            if (input[right] % 2 == 1)
-                noOfOddsFound++;
-        }
-        else
-        {
-            if (input[left] % 2 == 1)
-                noOfOddsFound--;
-            left++;
+            oddIndices[c] = i;
+            c++;
         }
     }
 
-    printf("%lld", counter);
+    int answer = 0;
+
+    for (int i = 0; i < noOfOdds - noOfOddNeeded + 1; i++)
+    {
+        int left = oddIndices[i];
+        int right = oddIndices[i + noOfOddNeeded - 1];
+
+        printf("\n%lld %lld", left, right); 
+
+        int leftcounter = 1;
+        while (left - 1 >= 0 && input[left - 1] % 2 != 1)
+        {
+            leftcounter++;
+            left--;
+        }
+
+        int rightcounter = 1;
+        while (right + 1 < inputLength && input[right + 1] % 2 != 1)
+        {
+            rightcounter++;
+            right++;
+        }
+
+        answer += (leftcounter * rightcounter);
+        printf(" %lld %lld %lld", leftcounter, rightcounter, answer);
+    }
+
+    printf("\n%lld", answer);
 }

@@ -43,17 +43,18 @@ void main()
         printf("\n%lld %lld", left, right); 
 
         int leftcounter = 1;
-        while (left - 1 >= 0 && input[left - 1] % 2 != 1)
-        {
-            leftcounter++;
-            left--;
+        int rightcounter = 1;
+        
+        if(left == 0){
+            leftcounter = 1;
+        }else{
+            leftcounter = oddIndices[i] - oddIndices[i-1];
         }
 
-        int rightcounter = 1;
-        while (right + 1 < inputLength && input[right + 1] % 2 != 1)
-        {
-            rightcounter++;
-            right++;
+        if(right == noOfOdds - 1){
+            rightcounter = 1;
+        }else{
+            rightcounter = oddIndices[i+1] - oddIndices[i];
         }
 
         answer += (leftcounter * rightcounter);

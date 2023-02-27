@@ -35,6 +35,7 @@ void main(){
             
             if(noOfZeroes <= noOfZ){
                 end++;
+                if(end == num) break;
                 if(input[end] == 0) noOfZeroes++;
             }else{
                 if(input[start] == 0) noOfZeroes--;

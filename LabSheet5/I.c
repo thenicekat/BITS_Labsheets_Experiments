@@ -41,10 +41,13 @@ void main()
     // Array to loop through all the odd indices
     for (int i = 0; i < noOfOdds - noOfOddNeeded + 1; i++)
     {
+        int leftIndex = i;
+        int rightIndex = i + noOfOddNeeded - 1;
+
         // left is used to track the first index
-        int left = oddIndices[i];
+        int left = oddIndices[leftIndex];
         // right is used to track the second index
-        int right = oddIndices[i + noOfOddNeeded - 1];
+        int right = oddIndices[rightIndex];
         printf("\n%lld %lld", left, right); 
 
         // These counters are used to calculate how many steps we can take on left and right
@@ -53,19 +56,19 @@ void main()
         
         // If i = 0, that means there's no odd number before this
         // So left counter = the index of the first odd number + 1
-        if(i == 0){
-            leftcounter = oddIndices[i] + 1;
+        if(leftIndex == 0){
+            leftcounter = oddIndices[leftIndex] + 1;
         }else{
-            leftcounter = oddIndices[i] - oddIndices[i-1];
+            leftcounter = oddIndices[leftIndex] - oddIndices[leftIndex-1];
         }
 
-        // If i + noOfOddNeeded - 1 which is basically the second index
+        // If rightIndex which is basically the second index
         // If this is equal to noOfOdds - 1, that would mean there's no element after this that is odd
         // So we add inputlength - that index
-        if(i + noOfOddNeeded - 1 == noOfOdds - 1){
-            rightcounter = inputLength - oddIndices[i + noOfOddNeeded - 1];
+        if(rightIndex == noOfOdds - 1){
+            rightcounter = inputLength - oddIndices[rightIndex];
         }else{
-            rightcounter = oddIndices[i + noOfOddNeeded] - oddIndices[i + noOfOddNeeded - 1];
+            rightcounter = oddIndices[rightIndex + 1] - oddIndices[rightIndex];
         }
 
         answer += (leftcounter * rightcounter);

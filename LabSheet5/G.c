@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+
 #define int long long int
 
 // We have a minimum function to find minimum value

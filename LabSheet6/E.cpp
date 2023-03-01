@@ -20,7 +20,13 @@
 
 // ahh but, let's say we have 3 1 2 0
 // If we use deq -> 0 2 1 3
-// We get answer as 3 1 but we should get 3 0
+// We get answer as 3 0 but we should get 3 0 F
+// If we have example as 3 1 -2 0
+// -2 1 3 -> 3 1 hmm still working ahh
+
+// Let's see 3 2 1 0 -> 0 1 2 3 -> 3 0 :)
+// Failing test case ;-;
+
 #include <iostream>
 #include <deque>
 
@@ -46,7 +52,7 @@ int main(){
             if(deq.front() < input[i]){
                 deq.push_front(input[i]);
             }else{
-                deq.push_back(input[i])
+                deq.push_back(input[i]);
             }
         }
     }

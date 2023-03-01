@@ -1,0 +1,1 @@
+// Simple stack implementation and pop for closing brackets

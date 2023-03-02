@@ -30,7 +30,8 @@ int main()
     }
 
     // We create a stack and keep track of all the previous smaller elements
-    // If we have a higher number, we pop it until we get a smaller number
+    // If we have a higher number in stack, we pop it until we get a smaller number
+    // So like 
     stack<int> prev_stack;
     int previous_smallest[numberOfInputs];
     for (int i = 0; i < numberOfInputs; i++)

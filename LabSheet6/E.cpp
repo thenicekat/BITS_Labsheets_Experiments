@@ -8,7 +8,7 @@
 // 8 3
 // 1 3 -1 -3 5 3 6 7
 
-// Initial approach was to keep track of maximum and see 
+// Initial approach was to keep track of maximum and see
 // But then when we remobve a max number, there is no way to find
 // the previous maximum Can we keep track of maximums in an array
 
@@ -27,38 +27,46 @@
 // Let's see 3 2 1 0 -> 0 1 2 3 -> 3 0 :)
 // Failing test case ;-;
 
+// Had to google, apparently we need to use monotonic dequeue i.e. elements are ordered in decreasing
+// order
+// https://leetcode.com/problems/sliding-window-maximum/solutions/871317/clear-thinking-process-with-picture-brute-force-to-mono-deque-python-java-javascript/?orderBy=most_votes
+
 #include <iostream>
 #include <deque>
 
 using namespace std;
 
-int main(){
+int main()
+{
     freopen("E.txt", "r", stdin);
 
     int inputLength, windowSize;
     cin >> inputLength >> windowSize;
 
     int input[inputLength];
-    for(int i=0; i<inputLength; i++){
+    for (int i = 0; i < inputLength; i++)
+    {
         cin >> input[i];
     }
 
     deque<int> deq;
-    // First take care of initial window
-    for(int i=0; i<windowSize; i++){
-        if(deq.empty()){
-            deq.push_back(input[i]);
-        }else{
-            if(deq.front() < input[i]){
-                deq.push_front(input[i]);
-            }else{
-                deq.push_back(input[i]);
+    // We make a deque, and then store the values in descending order, and the max will always be the front
+    // we pop front if it's remobved from the window
+    for (int i = 0; i < inputLength; i++)
+    {
+
+        while (!deq.empty() && input[deq.front()] < input[i])
+        {
+            deq.pop_back();
+        }
+
+        deq.push_back(i);
+
+        if(i >= windowSize - 1){
+            if(deq.front() == i - windowSize){
+                deq.pop_front();
             }
+            cout << input[deq.front()] << " ";
         }
     }
-    for(int i=0; i<inputLength - windowSize + 1; i++){
-        cout << input[i] << " ";
-    }
-
-    
 }

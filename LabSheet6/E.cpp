@@ -55,7 +55,7 @@ int main()
     for (int i = 0; i < inputLength; i++)
     {
 
-        while (!deq.empty() && input[deq.front()] < input[i])
+        while (!deq.empty() && input[deq.back()] < input[i])
         {
             deq.pop_back();
         }

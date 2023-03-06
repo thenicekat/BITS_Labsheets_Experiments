@@ -26,58 +26,41 @@ int main()
     for (int i = 0; i < numberOfInputs; i++)
         cin >> array[i];
 
-    stack<int> prev_stack;
-    int previous_greatest[numberOfInputs];
-    for (int i = 0; i < numberOfInputs; i++)
-    {
-
-        while (!prev_stack.empty() && array[prev_stack.top()] <= array[i])
-        {
-            prev_stack.pop();
-        }
-
-        if (prev_stack.empty())
-        {
-            previous_greatest[i] = -1;
-        }
-        else
-        {
-            previous_greatest[i] = prev_stack.top();
-        }
-        prev_stack.push(i);
-    }
-
     stack<int> next_stack;
     int next_greatest[numberOfInputs];
-    for (int i = numberOfInputs - 1; i >= 0; i--)
+    for (int i = 2 * numberOfInputs - 1; i >= 0; i--)
     {
-        while (!next_stack.empty() && array[next_stack.top()] <= array[i])
+        while (!next_stack.empty() && array[next_stack.top()] <= array[i % numberOfInputs])
         {
             next_stack.pop();
         }
 
-        if (next_stack.empty())
+        if (i < numberOfInputs)
         {
-            next_greatest[i] = -1;
+            if (next_stack.empty())
+            {
+                next_greatest[i] = -1;
+            }
+            else
+            {
+                next_greatest[i] = next_stack.top();
+            }
         }
-        else
-        {
-            next_greatest[i] = next_stack.top();
-        }
-        next_stack.push(i);
+        next_stack.push(i % numberOfInputs);
     }
 
     for (int i = 0; i < numberOfInputs; i++)
     {
-        if (next_greatest[i] != -1)
+        if (next_greatest[i] == -1)
         {
-            cout << next_greatest[i] - i;
-        }else if(previous_greatest[i] != -1){
-            cout << previous_greatest[i] - i + numberOfInputs;
-        }else{
-            cout << -1;
+            cout << -1 << " ";
         }
-        cout << " ";
+        else if (next_greatest[i] < i)
+        {
+            cout << next_greatest[i] - i + numberOfInputs << " ";
+        }
+        else
+            cout << next_greatest[i] - i << " ";
     }
 
     return 0;

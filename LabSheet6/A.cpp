@@ -9,8 +9,8 @@ using namespace std;
 class MinStack
 {
 private:
-    int stack[1000000];
-    int minArray[1000000];
+    int stack[10000];
+    int minArray[10000];
     int stackTracker;
     int minTracker;
 
@@ -104,13 +104,13 @@ int main()
     int numberOfInputs;
     cin >> numberOfInputs;
 
-    MinStack *minStack = new MinStack();
+    MinStack minStack;
 
     for (int i = 0; i < numberOfInputs; i++)
     {
         int temp;
         cin >> temp;
-        minStack->push(temp);
+        minStack.push(temp);
     }
 
     int numberOfOperations;
@@ -125,19 +125,19 @@ int main()
         {
             int temp;
             cin >> temp;
-            minStack->push(temp);
+            minStack.push(temp);
         }
         else if (operation == 2)
         {
-            minStack->pop();
+            minStack.pop();
         }
         else if (operation == 3)
         {
-            cout << minStack->top() << endl;
+            cout << minStack.top() << endl;
         }
         else if (operation == 4)
         {
-            cout << minStack->getMin() << endl;
+            cout << minStack.getMin() << endl;
         }
 
     }

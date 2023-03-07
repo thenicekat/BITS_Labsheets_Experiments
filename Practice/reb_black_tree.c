@@ -54,4 +54,28 @@ void leftRotate(Node **root, Node *x)
 
 void rightRotate(Node** root, Node* x){
     Node* toBeRoot = x->left;
+
+    if(toBeRoot->right != NULL){
+        Node* toBeRightLeft = toBeRoot->right;
+        x->left = toBeRightLeft;
+        toBeRoot->right = NULL;
+    }else{
+        x->left = NULL;
+    }
+
+    toBeRoot->right = x;
+
+    if(x->parent == NULL){
+        *root = toBeRoot;
+    }else if(x->parent->left == x){
+        x->parent->left = toBeRoot;
+    }else{
+        x->parent->right = toBeRoot;
+    }
+    
+    x->parent = toBeRoot;
+} 
+
+int main(){
+    
 }

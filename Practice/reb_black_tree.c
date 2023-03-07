@@ -51,3 +51,7 @@ void leftRotate(Node **root, Node *x)
     
     x->parent = toBeRoot;
 }
+
+void rightRotate(Node** root, Node* x){
+    Node* toBeRoot = x->left;
+}

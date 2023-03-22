@@ -50,7 +50,7 @@ class MaxHeap
     {
         int l = getLeftElement(i);
         int r = getRightElement(i);
-        int largest;
+        int largest = i;
 
         if (l < heap_size && array[l] >= array[i])
         {

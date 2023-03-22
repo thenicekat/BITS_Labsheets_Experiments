@@ -4,6 +4,7 @@
 // And we iterate in the inorder until we find the root, every node to the left will
 // be in the left sub tree and every node to the right will be in the right sub tree
 #include <iostream>
+#include <map>
 using namespace std;
 
 struct TreeNode
@@ -16,7 +17,7 @@ struct TreeNode
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-TreeNode *recursive_add_to_node(int *inorder, int *preorder, int start, int end, int *tracker)
+TreeNode *recursive_add_to_node(map<int, int> inorder, int *preorder, int start, int end, int *tracker)
 {
     // we check if the start and end are same for the inorder array
     if (start >= end)
@@ -28,15 +29,7 @@ TreeNode *recursive_add_to_node(int *inorder, int *preorder, int start, int end,
     TreeNode *root = new TreeNode(preorder[(*tracker)++]);
 
     // We iterate over inorder until we get the same value
-    int counter;
-    for (int i = start; i < end; i++)
-    {
-        if (root->val == inorder[i])
-        {
-            counter = i;
-            break;
-        }
-    }
+    int counter = inorder[root->val];
 
     // call the function onto the left and right nodes;
     root->left = recursive_add_to_node(inorder, preorder, start, counter, tracker);
@@ -62,6 +55,7 @@ int main()
 
     int preorder[counter];
     int inorder[counter];
+    map<int, int> inorder_map;
 
     for (int i = 0; i < counter; i++)
     {
@@ -70,15 +64,16 @@ int main()
     for (int i = 0; i < counter; i++)
     {
         cin >> inorder[i];
+        inorder_map[inorder[i]] = i;
     }
 
     int tracker = 0;
-    TreeNode *root = recursive_add_to_node(inorder, preorder, 0, counter, &tracker);
+    TreeNode *root = recursive_add_to_node(inorder_map, preorder, 0, counter, &tracker);
 
     // Need to find height of tree, because we need to make an array to store elements :)
     int h = get_height_of_tree(root);
     
-    int length = 2*h + 1;
+    int length = 2^h + 1;
     TreeNode* result[length + 1];
     result[0] = root;
 

@@ -43,11 +43,6 @@ void bst_to_gst(TreeNode* root, int* tracker){
     if(root->left != nullptr) bst_to_gst(root->left, tracker);
 }
 
-void convert_to_array(TreeNode* root, int array, int index){
-
-}
-
-
 int main(){
     freopen("Inputs/D.txt", "r", stdin);
     int counter;

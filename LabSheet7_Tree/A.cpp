@@ -89,7 +89,7 @@ class MaxHeap
 
     void print_heap(){
         for(int i=0; i<heap_size; i++){
-            cout << array[i] << ' ';
+            cout << array[i] << " ";
         }
         cout << endl;
     }

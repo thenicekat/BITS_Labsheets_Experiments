@@ -68,10 +68,10 @@ int main(){
         while(temp->left != nullptr && temp->left->val >= lowLim){
             temp = temp->left;
         }
-        if(temp != nullptr && temp->left != nullptr && temp->left->val < lowLim){
+        while(temp != nullptr && temp->left != nullptr && temp->left->val < lowLim){
             cout << "Deleting: " << temp->left->val << endl;
             TreeNode* l = temp->left;
-            temp->left = nullptr;
+            temp->left = temp->left->right;
             delete l;
         }
 
@@ -80,10 +80,10 @@ int main(){
         while(temp->right != nullptr && temp->right->val <= highLim){
             temp = temp->right;
         }
-        if(temp != nullptr && temp->right != nullptr && temp->right->val > highLim){
+        while(temp != nullptr && temp->right != nullptr && temp->right->val > highLim){
             cout << "Deleting: " << temp->right->val << endl;
             TreeNode* r = temp->right;
-            temp->right = nullptr;
+            temp->right = temp->right->left;
             delete r;
         }
         

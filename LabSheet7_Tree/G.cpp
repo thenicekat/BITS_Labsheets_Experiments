@@ -15,97 +15,8 @@
 // 4 2 6 coupons = 1 -> 6 2 4 coupons = 1 -> 3 2 4 coupons = 0 :) 
 
 #include <iostream>
+#include <queue>
 using namespace std;
-
-class MaxHeap
-{
-    private:
-    int *array;
-    int heap_size;
-    int customers;
-
-    public:
-    MaxHeap(int *arr, int size, int noOfDiscountCoupons)
-    {
-        array = arr;
-        heap_size = size;
-        customers = noOfDiscountCoupons;
-    }
-
-    int getParentElement(int a)
-    {
-        int x = (a - 1) / 2;
-        return x;
-    }
-
-    int getLeftElement(int a)
-    {
-        return (2 * a) + 1;
-    }
-
-    int getRightElement(int a)
-    {
-        return (2 * a) + 2;
-    }
-
-    void max_heapify(int i)
-    {
-        int l = getLeftElement(i);
-        int r = getRightElement(i);
-        int largest;
-
-        if (l < heap_size && array[l] >= array[i])
-        {
-            largest = l;
-        }
-        else
-            largest = i;
-
-        if (r < heap_size && array[r] >= array[largest])
-        {
-            largest = r;
-        }
-
-        if (largest != i)
-        {
-            swap(array[i], array[largest]);
-            max_heapify(largest);
-        }
-    }
-
-    void build_max_heap()
-    {
-        for (int t = heap_size / 2; t >= 0; t--)
-        {
-            max_heapify(t);
-        }
-    }
-
-    void customers_heap(int* res){
-        while(customers > 0){
-            int x = (2*(array[0]/2) < array[0]) ? array[0]/2 + 1 : array[0]/2;
-            (*res) += x;
-            array[0] -= x;
-            max_heapify(0);
-            customers--;
-        }
-    }
-
-    void print_heap(){
-        for(int i=0; i<heap_size; i++){
-            cout << array[i] << " ";
-        }
-        cout << endl;
-    }
-
-    int return_sum_heap(){
-        int ans = 0;
-        for(int i=0; i<heap_size; i++){
-            ans += array[i];
-        }
-        return ans;
-    }
-};
 
 int main()
 {
@@ -114,15 +25,27 @@ int main()
     int lengthOfArray, customers;
     cin >> lengthOfArray >> customers;
 
-    int input[lengthOfArray];
+    priority_queue<int> input;
+
     for (int i = 0; i < lengthOfArray; i++)
     {
-        cin >> input[i];
+        int in;
+        cin >> in;
+        input.push(in);
     }
 
-    MaxHeap* mh = new MaxHeap(input, lengthOfArray, customers);
     int answer = 0;
-    mh->build_max_heap();
-    mh->customers_heap(&answer);
+    while(customers > 0){
+            // Find the number
+            int x = (2*(input.top()/2) < input.top()) ? input.top()/2 + 1 : input.top()/2;
+            // Get the number that has to be added to the list
+            answer += x;
+            int temp = input.top() - x;
+            // Pop and push
+            input.pop();
+            input.push(temp);
+            
+            customers--;
+        }
     cout << answer << endl;
 }

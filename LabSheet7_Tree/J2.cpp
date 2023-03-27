@@ -37,15 +37,35 @@ int main()
         input2.pop();
     }
 
+    for(auto x: input1Arr){
+        cout << x<< " ";
+    }
+    cout << endl;
+    for(auto x: input2Arr){
+        cout << x<< " ";
+    }
+    cout << endl;
+
+    int visited[lengthOfArray][lengthOfArray] = { 0 };
+
     priority_queue<pair<int, pair<int, int>>> sumPriorityQueue;
     sumPriorityQueue.push(make_pair(input1Arr[0] + input2Arr[0], make_pair(0, 0)));
 
     for (int i = 0; i < k; i++)
     {
         pair<int, pair<int, int>> pp = sumPriorityQueue.top();
-        sumPriorityQueue.pop();
-        cout << pp.first << endl;
 
+        if(visited[pp.second.first][pp.second.second] == 1){
+            sumPriorityQueue.pop();
+            i--;
+            continue;
+        }
+
+        visited[pp.second.first][pp.second.second] = 1;
+        sumPriorityQueue.pop();
+        // cout << pp.second.first << "+" << pp.second.second << " " << pp.first << endl;
+        cout << pp.first << " ";
+        
         sumPriorityQueue.push(make_pair(input1Arr[pp.second.first] + input2Arr[pp.second.second + 1], make_pair(pp.second.first, pp.second.second + 1)));
         sumPriorityQueue.push(make_pair(input1Arr[pp.second.first + 1] + input2Arr[pp.second.second], make_pair(pp.second.first + 1, pp.second.second)));
     }

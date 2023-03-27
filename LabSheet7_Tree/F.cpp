@@ -4,6 +4,11 @@
 // So apparently the logic is to use a minheap
 // because we take first element of all the arrays put them
 
+// So there are 2 logics for this question, one being merging two vectors separately
+// then pushing them to the vector and removing the initially added ones 
+// but another logic is that we use heap of size k and this gives us time
+// complexity of (k + 2(n-k))logk = nlogk
+
 #include <iostream>
 #include <vector>
 #include <queue>

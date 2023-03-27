@@ -1,3 +1,7 @@
+// So the final logic is we have a priority queue which is built in nlogn
+// And then we keep halving it and pushing again which will be mlogn
+// So total will be (m+n)logn 
+
 #include <iostream>
 #include <queue>
 using namespace std;

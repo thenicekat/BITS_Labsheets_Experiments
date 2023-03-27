@@ -3,6 +3,13 @@
 // Like the logic is the first element in preorder is always the root
 // And we iterate in the inorder until we find the root, every node to the left will
 // be in the left sub tree and every node to the right will be in the right sub tree
+
+// So the final logic is we have both inorder and preorder traversals
+// Inorder tells us which nodes are to the left and which are to the right
+// Preorder gives us the starting or the root node in the tree
+// So we can say we go through all the elements in the preorder 
+// root->left will contain all elements to the left of the inorder and root->right will contain the right 
+
 #include <iostream>
 #include <map>
 using namespace std;

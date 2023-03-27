@@ -2,6 +2,9 @@
 // Here we need to add all the nodes onto stack and maybe use recursion or looping
 // to backtrack such that you get all possible sums
 // sort of we are doing DFS :)
+
+// The final logic is that we go through all the possible paths in 
+// hope of finding the path where it becomes zero at the leaf
 #include <iostream>
 using namespace std;
 

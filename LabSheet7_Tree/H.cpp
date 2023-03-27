@@ -2,6 +2,9 @@
 // The fact that it is a binary search tree makes it easy
 // I mean in a binary search tree, every node to the right has higher value
 // and every node to the left has lower value
+
+// now this is a little bit hard question, we have to recursively travel until we can
+// remove those nodes which are higher than the given limit and lower than the given limit
 #include <iostream>
 using namespace std;
 

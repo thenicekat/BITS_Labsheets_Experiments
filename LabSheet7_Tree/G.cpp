@@ -37,7 +37,7 @@ int main()
     int answer = 0;
     while(customers > 0){
             // Find the number
-            int x = (2*(input.top()/2) < input.top()) ? input.top()/2 + 1 : input.top()/2;
+            int x = (input.top() % 2 == 0) ? input.top()/2 : input.top()/2 + 1;
             // Get the number that has to be added to the list
             answer += x;
             int temp = input.top() - x;

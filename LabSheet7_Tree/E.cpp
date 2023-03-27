@@ -4,6 +4,10 @@
 
 // ok inorder is wrong because time complexity will o(all number of nodes)
 // sad
+
+// ok so here the logic is we go in order till rhe right most
+// and then start iterating backwards until the counter becomes 0
+
 #include <iostream>
 using namespace std;
 

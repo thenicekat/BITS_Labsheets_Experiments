@@ -11,6 +11,7 @@
 // root->left will contain all elements to the left of the inorder and root->right will contain the right 
 
 #include <iostream>
+#include <math.h>
 #include <map>
 using namespace std;
 
@@ -80,8 +81,9 @@ int main()
     // Need to find height of tree, because we need to make an array to store elements :)
     int h = get_height_of_tree(root);
     
-    int length = 2^h + 1;
-    TreeNode* result[length + 1];
+    int length = pow(2, h) - 1;
+
+    TreeNode* result[length];
     result[0] = root;
 
     // We loop till we reach leaves which happens to be 

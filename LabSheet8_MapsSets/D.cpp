@@ -15,18 +15,22 @@ int main(){
     int queries;
     cin >> queries;
 
+    // We create a dictionary
     map<int, int> dict;
 
     for(int i=0; i<queries; i++){
         int type, k;
         cin >> type >> k;
         
-        cout << "----------------------" << endl;
-        for(auto m: dict){
-            cout << "::>" << m.first << " " << m.second << endl;
-        }
-        cout << "----------------------" << endl;
-        cout << type << " " << k << endl;
+        // Debugging:
+        // cout << "----------------------" << endl;
+        // for(auto m: dict){
+        //     cout << "::>" << m.first << " " << m.second << endl;
+        // }
+        // cout << "----------------------" << endl;
+        // cout << type << " " << k << endl;
+
+        // If type = 1, either add or remove from dict in logn
         if(type == 1){
             if(dict.find(k) == dict.end()){
                 dict[k] = 1;
@@ -34,6 +38,7 @@ int main(){
                 if(dict[k] == 1) dict.erase(k);
             }
         }
+        // if type = 2, we need to find the upper bound
         else if(type == 2){
             if(dict.upper_bound(k) == dict.end()){
                 cout << -1 << endl;
@@ -41,6 +46,8 @@ int main(){
                 cout << dict.upper_bound(k)->first << endl;
             }
         }
+        // if type = 3, we need to find the first element smaller than the lower bound
+        // so the x-- extra comes
         else if(type == 3){
             auto x = dict.lower_bound(k);
             x--;

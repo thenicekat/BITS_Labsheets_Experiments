@@ -17,8 +17,7 @@ int main()
 
         // Take input - O(n)
         string key;
-        getline(cin >> ws, key);
-        // cin >> ws removes whitespace from previous inputs
+        cin >> key;
         cout << "Input: " << key << endl;
 
         // Create an ordered map

@@ -35,14 +35,8 @@ int main()
         // Converting first window
         for (int i = 0; i < windowSize; i++)
         {
-            if (store.find(input[i]) != store.end())
-            {
-                store[input[i]]++;
-            }
-            else
-            {
-                store[input[i]] = 1;
-            }
+
+            store[input[i]]++;
 
             if (store[input[i]] == elem)
             {
@@ -62,23 +56,15 @@ int main()
 
         for (int i = windowSize; i < length; i++)
         {
-            // remove element
+            // remove last element and check if the count becomes elem
             store[input[i - windowSize]]--;
-            if (store[input[i - windowSize]] && input[i - windowSize] > max)
+            if (store[input[i - windowSize]] == elem && input[i - windowSize] > max)
             {
                 max = input[i - windowSize];
             }
 
-            // add element
-            if (store.find(input[i]) != store.end())
-            {
-                store[input[i]]++;
-            }
-            else
-            {
-                store[input[i]] = 1;
-            }
-
+            // add new element and check if the count becomes elem
+            store[input[i]]++;
             if (store[input[i]] == elem)
             {
                 if (input[i] > max)

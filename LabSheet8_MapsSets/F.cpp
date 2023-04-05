@@ -6,7 +6,7 @@
 // but here xor needed is 0 so, B = 0 => we need A = C i.e. if there exists any previous subarray for which
 // cumxor is same, then we get answer okbi
 // we have 3 4 7 6 5 4
-// cum xor 3 7 0 6 3 7
+// cum-xor 3 7 0 6 3 7
 // (0, 2) (1, 4) (3, 6)
 
 // Simpler explanation, if we need subarray with given sum ->
@@ -18,7 +18,7 @@
 #include <iostream>
 #include <map>
 
-#define xorN 0
+#define xorNeeded 0
 
 using namespace std;
 
@@ -51,23 +51,21 @@ int main()
             // first find the prefix xor
             prefixXOR ^= input[i];
 
-            if(prefixXOR == xorN){
+            // Check if the prefixXor is the xor neededitself
+            if(prefixXOR == xorNeeded){
                 answer += 1;
             }
 
-            //In this case xorNeeded is 0
-            int prevXORneeded = prefixXOR ^ xorN;
+            // Otherwise check if there's any previous subarray which had this xor
+            //In this case xorNeededeeded is 0
+            int prevXORneeded = prefixXOR ^ xorNeeded;
 
             if(store.find(prevXORneeded) != store.end()){
                 // That means it did exist before
                 answer += store[prevXORneeded];
             }
 
-            if(store.find(prefixXOR) == store.end()){
-                store[prefixXOR] = 1;
-            }else{
-                store[prefixXOR]++;
-            }
+            store[prefixXOR]++;
         }
 
         cout << answer << endl;

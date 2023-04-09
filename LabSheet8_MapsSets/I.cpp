@@ -1,6 +1,6 @@
 // Again direct map question where we store number of matches a person lost in the map
 
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main()
@@ -16,25 +16,45 @@ int main()
         int nMatches, nPlayers;
         cin >> nMatches >> nPlayers;
 
-        int loserScore[nPlayers] = {0};
+        set<int> loserSet;
+        set<int> next;
+
+        vector<int> winners, losers;
 
         // O(n)
         for (int i = 0; i < nMatches; i++)
         {
             int w, l;
             cin >> w >> l;
-
-            loserScore[l - 1]++;
+            
+            winners.push_back(w);
+            losers.push_back(l);
         }
-        // O(k)
-        for(int i=0; i<nPlayers; i++){
-            if(loserScore[i] <= 1){
-                cout << i + 1 << " ";
+
+        for (int i = 0; i < winners.size(); i++)
+        {
+            next.insert(winners[i]);
+        }
+
+        for(int i=0; i<losers.size(); i++){
+             if(loserSet.find(losers[i]) != loserSet.end()){
+                // It's already there in loserSet
+                // then remove from next because they already lost once
+                if(next.find((losers[i])) != next.end()){
+                    next.erase(next.find((losers[i])));
+                }; 
+            }else{
+                // otherwise add into loserSet and next
+                loserSet.insert(losers[i]);
+                next.insert(losers[i]);
             }
+        }
+        
+        for(auto i=next.begin(); i!=next.end(); ++i){
+            cout << *i << " ";
         }
         cout << endl;
 
-        // TC = O(n + k) = O(nlogn)
         cout << "--------- END TEST CASE "
              << " ---------" << endl;
     }

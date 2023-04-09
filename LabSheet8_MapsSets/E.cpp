@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <map>
+#include <stack>
 using namespace std;
 
 int main()
@@ -30,7 +31,9 @@ int main()
             cin >> input[i];
         }
 
-        int max = -1;
+        // int max = -1;
+        stack<int> prevNumberStore;
+        prevNumberStore.push(-1);
 
         // Converting first window
         for (int i = 0; i < windowSize; i++)
@@ -40,45 +43,47 @@ int main()
 
             if (store[input[i]] == elem)
             {
-                if (input[i] > max)
+                if(!prevNumberStore.empty() && input[i] > prevNumberStore.top())
                 {
-                    max = input[i];
+                    prevNumberStore.push(input[i]);
                 }
             }
 
-            if (max == input[i] && store[input[i]] > elem)
+            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] > elem)
             {
-                max = -1;
+                prevNumberStore.pop();
             }
         }
 
-        cout << max << endl;
+        if(!prevNumberStore.empty()) cout << prevNumberStore.top() << endl;
+        else cout << -1 << endl;
 
         for (int i = windowSize; i < length; i++)
         {
             // remove last element and check if the count becomes elem
             store[input[i - windowSize]]--;
-            if (store[input[i - windowSize]] == elem && input[i - windowSize] > max)
+            if (!prevNumberStore.empty() && store[input[i - windowSize]] == elem && input[i - windowSize] > prevNumberStore.top())
             {
-                max = input[i - windowSize];
+                prevNumberStore.push(input[i - windowSize]);
             }
 
             // add new element and check if the count becomes elem
             store[input[i]]++;
             if (store[input[i]] == elem)
             {
-                if (input[i] > max)
+                if (!prevNumberStore.empty() && input[i] > prevNumberStore.top())
                 {
-                    max = input[i];
+                    prevNumberStore.push(input[i]);
                 }
             }
 
-            if (max == input[i] && store[input[i]] > elem)
+            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] > elem)
             {
-                max = -1;
+                prevNumberStore.pop();
             }
 
-            cout << max << endl;
+            if(!prevNumberStore.empty()) cout << prevNumberStore.top() << endl;
+            else cout << -1 << endl;
         }
 
         cout << "--------- END TEST CASE "

@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <map>
-#include <stack>
+#include <set>
 using namespace std;
 
 int main()
@@ -31,9 +31,7 @@ int main()
             cin >> input[i];
         }
 
-        // int max = -1;
-        stack<int> prevNumberStore;
-        prevNumberStore.push(-1);
+        set<int> elements;
 
         // Converting first window
         for (int i = 0; i < windowSize; i++)
@@ -43,49 +41,52 @@ int main()
 
             if (store[input[i]] == elem)
             {
-                if (!prevNumberStore.empty() && input[i] > prevNumberStore.top())
-                {
-                    prevNumberStore.push(input[i]);
-                }
+                elements.insert(input[i]);
             }
 
-            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] != elem)
+            if (store[input[i]] != elem)
             {
-                prevNumberStore.pop();
+                elements.erase(input[i]);
             }
         }
 
-        cout << prevNumberStore.top() << endl;
+        if (elements.size() != 0)
+            cout << *(elements.rbegin()) << endl;
+        else
+            cout << -1 << endl;
 
         for (int i = windowSize; i < length; i++)
         {
             // 1. remove last element
             // check if the count becomes elem
             store[input[i - windowSize]]--;
-            if (!prevNumberStore.empty() && store[input[i - windowSize]] == elem && input[i - windowSize] > prevNumberStore.top())
+            if (store[input[i - windowSize]] == elem)
             {
-                prevNumberStore.push(input[i - windowSize]);
+                elements.insert(input[i - windowSize]);
             }
-            // check if it changes from elem
-            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i - windowSize] && store[input[i - windowSize]] != elem)
+
+            if (store[input[i - windowSize]] != elem)
             {
-                prevNumberStore.pop();
+                elements.erase(input[i - windowSize]);
             }
 
             // 2. add new element
             // check if the count becomes elem
             store[input[i]]++;
-            if (!prevNumberStore.empty() && input[i] > prevNumberStore.top() && store[input[i]] == elem)
+            if (store[input[i]] == elem)
             {
-                prevNumberStore.push(input[i]);
-            }
-            // check if it changes from elem
-            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] != elem)
-            {
-                prevNumberStore.pop();
+                elements.insert(input[i]);
             }
 
-            cout << prevNumberStore.top() << endl;
+            if (store[input[i]] != elem)
+            {
+                elements.erase(input[i]);
+            }
+
+            if (elements.size() != 0)
+                cout << *(elements.rbegin()) << endl;
+            else
+                cout << -1 << endl;
         }
 
         cout << "--------- END TEST CASE "

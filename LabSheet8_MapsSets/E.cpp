@@ -43,47 +43,49 @@ int main()
 
             if (store[input[i]] == elem)
             {
-                if(!prevNumberStore.empty() && input[i] > prevNumberStore.top())
-                {
-                    prevNumberStore.push(input[i]);
-                }
-            }
-
-            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] > elem)
-            {
-                prevNumberStore.pop();
-            }
-        }
-
-        if(!prevNumberStore.empty()) cout << prevNumberStore.top() << endl;
-        else cout << -1 << endl;
-
-        for (int i = windowSize; i < length; i++)
-        {
-            // remove last element and check if the count becomes elem
-            store[input[i - windowSize]]--;
-            if (!prevNumberStore.empty() && store[input[i - windowSize]] == elem && input[i - windowSize] > prevNumberStore.top())
-            {
-                prevNumberStore.push(input[i - windowSize]);
-            }
-
-            // add new element and check if the count becomes elem
-            store[input[i]]++;
-            if (store[input[i]] == elem)
-            {
                 if (!prevNumberStore.empty() && input[i] > prevNumberStore.top())
                 {
                     prevNumberStore.push(input[i]);
                 }
             }
 
-            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] > elem)
+            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] != elem)
+            {
+                prevNumberStore.pop();
+            }
+        }
+
+        cout << prevNumberStore.top() << endl;
+
+        for (int i = windowSize; i < length; i++)
+        {
+            // 1. remove last element
+            // check if the count becomes elem
+            store[input[i - windowSize]]--;
+            if (!prevNumberStore.empty() && store[input[i - windowSize]] == elem && input[i - windowSize] > prevNumberStore.top())
+            {
+                prevNumberStore.push(input[i - windowSize]);
+            }
+            // check if it changes from elem
+            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i - windowSize] && store[input[i - windowSize]] != elem)
             {
                 prevNumberStore.pop();
             }
 
-            if(!prevNumberStore.empty()) cout << prevNumberStore.top() << endl;
-            else cout << -1 << endl;
+            // 2. add new element
+            // check if the count becomes elem
+            store[input[i]]++;
+            if (!prevNumberStore.empty() && input[i] > prevNumberStore.top() && store[input[i]] == elem)
+            {
+                prevNumberStore.push(input[i]);
+            }
+            // check if it changes from elem
+            if (!prevNumberStore.empty() && prevNumberStore.top() == input[i] && store[input[i]] != elem)
+            {
+                prevNumberStore.pop();
+            }
+
+            cout << prevNumberStore.top() << endl;
         }
 
         cout << "--------- END TEST CASE "

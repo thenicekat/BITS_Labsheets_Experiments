@@ -44,13 +44,27 @@ int main()
         int canHappen = 0;
         for (int i = 0; i < inLen; i++){
             difference[i] = a[i] - b[i];
-            canHappen+= difference[i];
+            canHappen += difference[i];
         }
 
         if(canHappen < 0){
             cout << -1 << endl;
         }else{
+            stack<int> st;
+            int answer = 0;
+            int sum = 0;
+            for(int i=0; i<inLen; i++){
+                sum += difference[i];
+                st.push(difference[i]);
 
+                if(sum < 0){
+                    sum -= st.top();
+                    st.pop();
+                    answer++;
+                }
+            }
+
+            cout << answer << endl;
         }
 
         cout << "--------- END TEST CASE "

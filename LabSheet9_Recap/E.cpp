@@ -1,11 +1,11 @@
-// Sparse Matrix 
+// Sparse Matrix
 // We only multiply if the numbers are non zero
 // Matrix A
 // (1, 1) = 1
 // (2, 1) = -1
 // (2, 3) = 3
 
-// Matrix B 
+// Matrix B
 // (1, 1) = 7 -> (1, 3) = 7
 // (3, 3) = 1 -> (3, 1) = 1
 
@@ -23,41 +23,82 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
+int main()
+{
     freopen("Inputs/E.txt", "r", stdin);
     int counter;
     cin >> counter;
 
-    for (int i = 0; i < counter; i++){
+    for (int i = 0; i < counter; i++)
+    {
         cout << "----------- TEST CASE " << i + 1 << " -----------" << endl;
 
         int m, k, n;
         cin >> m >> k >> n;
-        
+
         // O(p)
-        int p;
-        cin >> p;
-        map<pair<int, int>, int> matrixA;
-        for(int i=0; i<p; i++){
+        int noOfElementsP;
+        cin >> noOfElementsP;
+        map<
+            int,
+            map<pair<int, int>, int>>
+            matrixA;
+
+        for (int i = 0; i < noOfElementsP; i++)
+        {
             int a, b, c;
             cin >> a >> b >> c;
-            matrixA[{a, b}] = c;
+
+            matrixA[b][{a, b}] = c;
         }
 
-        map<pair<int, int>, int> result;
+        // Debugging :)
+        // for(auto x: matrixArows){
+        //     cout << x.first << endl;
+        //     for(auto m: x.second){
+        //         cout << m.first.first << " " << m.first.second << "->" << m.second << endl;
+        //     }
+        // }
 
-        // O(q)
-        int q;
-        cin >> q;
-        map<pair<int, int>, int> matrixB;
-        for(int i=0; i<q; i++){
+        map<
+            int,
+            map<pair<int, int>, int>>
+            result;
+
+        int noOfElementsQ;
+        cin >> noOfElementsQ;
+        for (int i = 0; i < noOfElementsQ; i++)
+        {
             int a, b, c;
             cin >> a >> b >> c;
-            matrixB[{a, b}] = c;
+
+            for (auto x : matrixA[b])
+            {
+                // cout << x.second << " " << c << endl;
+                result[b][x.first] += c * x.second;
+            }
         }
 
+        int counter = 0;
+        for (auto x : result)
+        {
+            for (auto m : x.second)
+            {
+                counter++;
+            }
+        }
 
+        cout << counter << endl;
 
-        cout << "--------- END TEST CASE " << " ---------" << endl;
+        for (auto x : result)
+        {
+            for (auto m : x.second)
+            {
+                cout << m.first.first << " " << m.first.second << " " << m.second << endl;
+            }
+        }
+
+        cout << "--------- END TEST CASE "
+             << " ---------" << endl;
     }
 }

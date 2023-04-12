@@ -16,6 +16,8 @@
 // petrolUsed  2 3 4 5 6 1
 // differences -1 -1 -1 -1 -1 5
 
+// Maybe I should think of stack :)
+
 #include <bits/stdc++.h>
 using namespace std;
 

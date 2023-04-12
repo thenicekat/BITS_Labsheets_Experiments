@@ -60,9 +60,7 @@ int main()
         //     }
         // }
 
-        map<
-            int,
-            map<pair<int, int>, int>>
+        map<pair<int, int>, int>
             result;
 
         int noOfElementsQ;
@@ -72,30 +70,24 @@ int main()
             int a, b, c;
             cin >> a >> b >> c;
 
-            for (auto x : matrixA[b])
+            for (auto x : matrixA[a])
             {
-                // cout << x.second << " " << c << endl;
-                result[b][x.first] += c * x.second;
+                result[{x.first.first, b}] += c * x.second;
             }
         }
 
         int counter = 0;
         for (auto x : result)
         {
-            for (auto m : x.second)
-            {
-                counter++;
-            }
+            counter++;
         }
 
         cout << counter << endl;
 
         for (auto x : result)
         {
-            for (auto m : x.second)
-            {
-                cout << m.first.first << " " << m.first.second << " " << m.second << endl;
-            }
+
+            cout << x.first.first << " " << x.first.second << " " << x.second << endl;
         }
 
         cout << "--------- END TEST CASE "

@@ -5,70 +5,98 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int checkIfPossible(int books[], int booksLength, int noOfPeople, int barrier){
-    int noOfStudents = 1;
+int checkIfPossible(int books[], int booksLength, int noOfPeople, int barrier)
+{
+    cout << "Barrier: " << barrier << endl;
+    int noOfStudents = 0;
     int currStudent = 0;
-    
-    int i = 0; 
-    while(i < booksLength){
-        while(currStudent <= barrier){
-            currStudent += books[i];
-            i++;
-        }
-        
-        // Add to students list
-        noOfStudents++;
 
-        currStudent = 0;        
+    for (int i = 0; i < booksLength; i++)
+    {
+        if (currStudent + books[i] > barrier)
+        {
+            noOfStudents++;
+            currStudent = books[i];
+            if (currStudent > barrier)
+                return 0;
+        }
+        else
+        {
+            currStudent += books[i];
+        }
     }
-    return noOfStudents == noOfPeople;
+    if (noOfStudents < noOfPeople)
+        return 1;
+    return 0;
 }
 
-int main(){
+int main()
+{
     freopen("Inputs/H.txt", "r", stdin);
     int counter;
     cin >> counter;
 
-    for (int i = 0; i < counter; i++){
-        cout << "----------- TEST CASE " << i + 1 << " -----------" << endl;
+    for (int k = 0; k < counter; k++)
+    {
+        cout << "----------- TEST CASE " << k + 1 << " -----------" << endl;
 
-        int noOfBooks, noOfPeople;
-        int books[noOfBooks];
-
+        int noOfBooks = 0, noOfPeople = 0;
         cin >> noOfBooks >> noOfPeople;
 
-        int sumOfBooks, maxBook = 0, minBook = INT_MAX;
+        int books[noOfBooks];
+
+        int sumOfBooks = 0;
+        int maxBook = 0;
+        int minBook = INT_MAX;
 
         // In n we loop and get input
-        for(int i=0; i<noOfBooks; i++){
-            cin >> books[i];
-            sumOfBooks += books[i];
-            maxBook = max(maxBook, books[i]);
-            minBook = min(minBook, books[i]);
+        for (int m = 0; m < noOfBooks; m++)
+        {
+            cin >> books[m];
+            sumOfBooks += books[m];
+
+            if (books[m] > maxBook)
+            {
+                maxBook = books[m];
+            }
+
+            if (books[m] < minBook)
+            {
+                minBook = books[m];
+            }
         }
 
-        if(noOfBooks < noOfPeople){
+        if (noOfBooks < noOfPeople)
+        {
             cout << -1 << endl;
-        }else if(noOfBooks == noOfPeople){
+        }
+        else if (noOfBooks == noOfPeople)
+        {
             cout << maxBook << endl;
-        }else{
+        }
+        else
+        {
             int start = minBook;
             int end = sumOfBooks;
             int res = -1;
-
-            while(start <= end){
+            while (start <= end)
+            {
                 int mid = (start + end) >> 1;
-                
-                if(checkIfPossible(books, noOfBooks, noOfPeople, mid)){
+
+                if (checkIfPossible(books, noOfBooks, noOfPeople, mid))
+                {
                     end = mid - 1;
                     res = mid;
-                }else{
+                }
+                else
+                {
                     start = mid + 1;
                 }
             }
             cout << res << endl;
         }
 
-        cout << "--------- END TEST CASE " << " ---------" << endl;
+        cout << "--------- END TEST CASE "
+             << " ---------" << endl;
     }
 }

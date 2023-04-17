@@ -23,6 +23,8 @@
 // sum[0, R] – sum[0, L-1] / (R – L + 1) = 0
 // => sum[0, R] = sum[0, L-1]
 
+// In simple, average should be 0, sum should be 0
+
 #include <bits/stdc++.h>
 using namespace std;
 

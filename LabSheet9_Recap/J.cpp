@@ -2,15 +2,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Time{
-    public:
-    int begin;
-    int end;
-};
-
-bool compare(Time a, Time b){
-    return a.begin < b.begin;
-}
 
 int main(){
     freopen("Inputs/J.txt", "r", stdin);
@@ -24,32 +15,28 @@ int main(){
         cin >> inLen;
 
         // Take input O(n)
-        Time input[inLen];
+        pair<int, int> input[inLen];
         for(int i=0; i<inLen; i++){
-            cin >> input[i].begin;
-            cin >> input[i].end;
+            cin >> input[i].first;
+            cin >> input[i].second;
         }
 
-        // Sort them using compare O(nlogn)
-        sort(input, input + inLen, compare);
+        sort(input, input + inLen);
 
-        // Create a new array for answer
-        Time answer[inLen];
-        answer[0] = input[0];
+        int answer = 0;
 
-        int counter = 0;
-        int lastExit = input[0].end;
-        for(int i=1; i<inLen; i++){
-            if(input[i].begin <= lastExit){
-                lastExit = max(lastExit, input[i].end);
-                answer[i - 1].end = lastExit;
-            }else{
-                answer[++counter] = input[i];
-                lastExit = max(lastExit, input[i].end);
+        priority_queue<int, vector<int>, greater<int>> pq;
+        for(int i=0; i<inLen; i++){
+            while(!pq.empty() && input[i].first > pq.top()){
+                pq.pop();
             }
+
+            pq.push(input[i].second);
+
+            answer = max(answer, (int) pq.size());
         }
 
-        cout << inLen - counter << endl;
+        cout << answer << endl;
 
         cout << "--------- END TEST CASE " << " ---------" << endl;
     }

@@ -13,29 +13,44 @@ int main()
     {
         cout << "----------- TEST CASE " << i + 1 << " -----------" << endl;
 
+        map<int, int> store, storeSecondHalf;
+
         int inLen, remK;
         cin >> inLen >> remK;
 
         int input[inLen];
-        map<int, int> store;
         for (int i = 0; i < inLen; i++)
         {
+            // Take input
             cin >> input[i];
-            store[input[i]]++;
+
+            if (i < inLen / 2)
+            {
+                store[input[i]]++;
+            }
+            else
+            {
+                storeSecondHalf[input[i]]++;
+            }
         }
+        
+        sort(input, input + inLen);
 
         int answer = 0;
 
         for (auto x : store)
         {
-            for(int i=0; i<x.second; i++){
-                auto iterator = store.upper_bound(x.first + remK - 1);
-                if (iterator != store.end())
+            for (int i = 0; i < x.second; i++)
+            {
+                auto iterator = storeSecondHalf.upper_bound(x.first + remK - 1);
+                if (iterator != storeSecondHalf.end())
                 {
                     cout << x.first << " -> " << (*iterator).first << endl;
 
-                    if(store[(*iterator).first] == 1) store.erase(iterator);
-                    else store[(*iterator).first]--;
+                    if (storeSecondHalf[(*iterator).first] == 1)
+                        storeSecondHalf.erase(iterator);
+                    else
+                        storeSecondHalf[(*iterator).first]--;
 
                     answer++;
                 }

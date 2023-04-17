@@ -21,19 +21,24 @@ int main()
         for (int i = 0; i < inLen; i++)
         {
             cin >> input[i];
-            store[input[i]] = 0;
+            store[input[i]]++;
         }
 
         int answer = 0;
 
         for (auto x : store)
         {
-            auto iterator = store.upper_bound(x.first + remK - 1);
-            if (iterator != store.end())
-            {
-                cout << x.first << " -> " << (*iterator).first << endl;
-                store.erase(iterator);
-                answer++;
+            for(int i=0; i<x.second; i++){
+                auto iterator = store.upper_bound(x.first + remK - 1);
+                if (iterator != store.end())
+                {
+                    cout << x.first << " -> " << (*iterator).first << endl;
+
+                    if(store[(*iterator).first] == 1) store.erase(iterator);
+                    else store[(*iterator).first]--;
+
+                    answer++;
+                }
             }
         }
 

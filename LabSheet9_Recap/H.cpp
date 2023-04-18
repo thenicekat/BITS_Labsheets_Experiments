@@ -8,7 +8,7 @@ using namespace std;
 int checkIfPossible(int books[], int booksLength, int noOfPeople, int barrier)
 {
     cout << "Barrier: " << barrier << endl;
-    int noOfStudents = 0;
+    int noOfStudents = 1;
     int currStudent = 0;
 
     for (int i = 0; i < booksLength; i++)
@@ -17,17 +17,13 @@ int checkIfPossible(int books[], int booksLength, int noOfPeople, int barrier)
         {
             noOfStudents++;
             currStudent = books[i];
-            if (currStudent > barrier)
-                return 0;
         }
         else
         {
             currStudent += books[i];
         }
     }
-    if (noOfStudents < noOfPeople)
-        return 1;
-    return 0;
+    return (noOfStudents <= noOfPeople);
 }
 
 int main()

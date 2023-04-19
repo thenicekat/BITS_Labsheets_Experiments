@@ -6,16 +6,9 @@
 // 18 21 23 26 30
 // 5
 
-// We loop through first row and eliminate some columns
-// we loop through first column and eliminate some rows
-// We will have
-// 1 4
-// 2 5
-// 3 6
-// We loop through last row and last column and eliminate some rows and columns 
-// but idk if we can make that or not
-// We can remove 1 4
-// hmmm we can do this
+// We start from top right corner and keep moving
+// if number is higher than toFind, then we eliminate the column
+// if number is lower than toFind, we eliminate the row
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -40,42 +33,25 @@ int main(){
         int toFind;
         cin >> toFind;
 
-        int rightMostColumn = 0, bottomMostRow = 0, topMostRow = 0, leftMostColumn = 0;
+        int col = n - 1;
+        int row = 0;
 
-        // First we loop through the top row :)
-        for(int i=0; i<n; i++){
-            if(input[0][i] < toFind){
-                rightMostColumn = i;
+        int found = 0;
+
+        while(col >= 0 && row < m){
+            if(input[row][col] == toFind){
+                cout << "Yes" << endl;
+                found = 1;
+            }
+
+            if(input[row][col] < toFind){
+                row++;
+            }else{
+                col--;
             }
         }
 
-        // Then we loop through the left column :)
-        for(int i=0; i<m; i++){
-            if(input[i][0] < toFind){
-                bottomMostRow = i;
-            }
-        }
-
-        // Then we loop through the bottom most row of the new matrix
-        for(int i=0; i<rightMostColumn; i++){
-            if(input[top][i] < toFind){
-                leftMostColumn++;
-            }
-        }
-
-        // Then we loop through the leftMostColumn to find the topMostRow
-        for(int i=0; i<bottomMostRow; i++){
-            if(input[i][rightMostColumn] < toFind){
-                topMostRow++;
-            }
-        }
-
-        for(int i=topMostRow; i<=bottomMostRow; i++){
-            for(int j=leftMostColumn; j<=rightMostColumn; j++){
-                cout << input[i][j] << " ";
-            }
-            cout << endl;
-        }
+        if(found == 0) cout << "No" << endl;
 
         cout << "--------- END TEST CASE " << " ---------" << endl;
     }

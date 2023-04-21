@@ -6,46 +6,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-float recursiveCalculateMedian(int a[], int aleft, int aright, int b[], int bleft, int bright)
-{
-    float median_a;
-    // Check if length of a is even
-    if ((aright - aleft) % 2 == 0)
-    {
-        // if yes then median would be
-        median_a = (float)(a[(aright + aleft) / 2 - 1] + a[(aright + aleft) / 2]) / 2;
-    }
-    else
-    {
-        median_a = a[(aright + aleft) / 2];
-    }
-
-    float median_b;
-    // Check if length of b is even
-    if ((bright - bleft) % 2 == 0)
-    {
-        // if yes then medibn would be
-        median_b = (float)(b[(bright + bleft) / 2 - 1] + b[(bright + bleft) / 2]) / 2;
-    }
-    else
-    {
-        median_b = b[(bright + bleft) / 2];
-    }
-
-    if (median_a == median_b)
-    {
-        return median_a;
-    }
-    else if (median_a > median_b)
-    {
-        return recursiveCalculateMedian(a, aleft, (aright + aleft) / 2, b, (bleft + bright) / 2, bright);
-    }
-    else
-    {
-        return recursiveCalculateMedian(a, (aright + aleft) / 2, aright, b, bleft, (bleft + bright) / 2);
-    }
-}
-
 int main()
 {
     freopen("Inputs/C.txt", "r", stdin);
@@ -71,7 +31,46 @@ int main()
             cin >> input_b[i];
         }
 
-        cout << recursiveCalculateMedian(input_a, 0, inLenA, input_b, 0, inLenB) << endl;
+        int found = 0;
+
+        int low = 0;
+        int high = inLenA;
+
+        while (low <= high && !found)
+        {
+            int cut1 = (low + high) >> 1;
+            int cut2 = (inLenA + inLenB + 1)/2 - cut1;
+
+            int left1 = (cut1 == 0) ? INT_MIN : input_a[cut1 - 1];
+            int left2 = (cut2 == 0) ? INT_MIN : input_b[cut2 - 1];
+            int right1 = (cut1 == inLenA) ? INT_MAX : input_a[cut1];
+            int right2 = (cut2 == inLenB) ? INT_MAX : input_b[cut2];
+
+            if (left1 <= right2 && left2 <= right1)
+            {
+                if ((inLenA + inLenB) % 2 == 0)
+                {
+                    cout << (max(left1, left2) + min(right1, right2)) / 2.0 << fixed << setprecision(5) << endl;
+                    found = 1;
+                }
+                else
+                {
+                    cout << max(left1, left2) << fixed << setprecision(5) << endl;
+                    found = 1;
+                }
+            }
+            else if (left1 > right2)
+            {
+                high = cut1 - 1;
+            }
+            else
+            {
+                low = cut1 + 1;
+            }
+        }
+
+        if (!found)
+            cout << 0 << endl;
 
         cout << "--------- END TEST CASE "
              << " ---------" << endl;

@@ -1,25 +1,96 @@
-// You have to observe that when you want to change last, 
-// then you have to flip twice and you can get there
-// so like first example, is 3 2 1 4 -> We go from right and we check if position is wrong
-// 1 2 3 4
-// In second case, we have 3 4 2 1
-// We need to get the 4 in the end
-// we do swap of 2
-// 4 3 2 1
-// then we do 1 2 3 4
+// ok fuck you -> me I mean
+// https://www.geeksforgeeks.org/pancake-sorting/
 
-// if we have 4 3 5 6 2 1
-// we need 6 in the end so, we do 6 5 3 4 2 1
-// then we send it to end -> 1 2 4 3 5 6
-// then we again go through this and find that 3 is out of place
-// so we do 4 2 1 3 5 6
-// then we have 3 1 2 4 5 6
-// then we have 2 1 3 4 5 6
-// 1 2 3 4 5 6
-// so answer will be
-// 4 6 3 4 
+#include <bits/stdc++.h>
+using namespace std;
 
-// Can we always replace 2 elements in 4 operations without editing it
-// 3 2 1 4 (Input)
-// 1 2 3 4 (3)
-// 
+// Make a flip function which does the flips which the question describes
+// O(n) :)
+void flip(int arr[], int x)
+{
+    int temp;
+    int start = 0;
+    while (start < x)
+    {
+        temp = arr[start];
+        arr[start] = arr[x];
+        arr[x] = temp;
+        x--;
+        start++;
+    }
+}
+
+// Make a function that returns max index in the array
+int maxIndex(int arr[], int x)
+{
+    int maxIndex = 0;
+    for (int i = 1; i < x; i++)
+    {
+        if (arr[i] > arr[maxIndex])
+        {
+            maxIndex = i;
+        }
+    }
+    return maxIndex;
+}
+
+void printArray(int arr[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    freopen("Inputs/D.txt", "r", stdin);
+    int counter;
+    cin >> counter;
+
+    for (int m = 0; m < counter; m++)
+    {
+        cout << "----------- TEST CASE " << m + 1 << " -----------" << endl;
+
+        // Taking input
+        int inLen;
+        cin >> inLen;
+        int input[inLen];
+        for (int i = 0; i < inLen; i++)
+        {
+            cin >> input[i];
+        }
+
+        vector<int> ans;
+
+        // Loop from end
+        for (int i = inLen; i > 1; i--)
+        {
+            int maxI = maxIndex(input, i);
+
+            if (maxI != i - 1)
+            {
+                if (maxI != 0)
+                {
+                    ans.push_back(maxI);
+                    // flip such that maxI goes to 0
+                    flip(input, maxI);
+                }
+                ans.push_back(i - 1);
+                // flip again such that maxI comes to currIndex
+                flip(input, i - 1);
+            }
+        }
+
+        cout << ans.size() << endl;
+        for (int i = 0; i < ans.size(); i++)
+        {
+            cout << ans[i] + 1 << " ";
+        }
+        cout << endl;
+
+        cout << "--------- END TEST CASE "
+             << " ---------" << endl;
+    }
+}

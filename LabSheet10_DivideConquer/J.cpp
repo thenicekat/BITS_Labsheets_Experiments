@@ -22,8 +22,8 @@ int main()
         priority_queue<
             pair<int, pair<int, int>>,
             vector<pair<int, pair<int, int>>>,
-            greater<pair<int, pair<int, int>>>>
-            store;
+            greater<pair<int, pair<int, int>>>
+        >   store;
 
         for (int i = 0; i < dim; i++)
         {

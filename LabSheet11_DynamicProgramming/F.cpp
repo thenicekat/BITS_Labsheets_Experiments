@@ -8,12 +8,16 @@ using namespace std;
 
 int couponChange(vector<vector<int>> dp, int input[], int index, int needed){
     // cout << index << " " << needed << endl;
-    if(index == 0 || needed == 0){
+    if(needed == 0){
         return dp[index][needed] = 0;
     }
     
+    if(index == 0){
+        return 1000000000;
+    }
+    
     if(input[index - 1] <= needed)
-        return dp[index][needed] = max(
+        return dp[index][needed] = min(
             1 + couponChange(dp, input, index, needed - input[index - 1]), 
             couponChange(dp, input, index - 1, needed)
         );
@@ -39,7 +43,7 @@ int main(){
         vector<vector<int>> dp(inLen + 1, vector<int> (needed + 1, -1));
 
         int answer = couponChange(dp, input, inLen, needed);
-        if(answer == 0){
+        if(answer == 1000000000){
             cout << -1 << endl;
         }else{
             cout << answer << endl;

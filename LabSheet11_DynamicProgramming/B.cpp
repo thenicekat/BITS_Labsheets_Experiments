@@ -1,4 +1,4 @@
-// This is same as longest increasing subsequence
+// This is same as longest common subsequence
 #include <bits/stdc++.h>
 using namespace std;
 

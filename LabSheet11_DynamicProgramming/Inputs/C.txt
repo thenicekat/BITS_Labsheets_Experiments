@@ -1,9 +1,0 @@
-2
-5
-horse
-3
-ros
-3
-abc
-4
-defg

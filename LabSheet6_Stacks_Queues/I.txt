@@ -1,4 +1,0 @@
-3
-/home/downloads/ 
-dir1/./dir2/../../dir3/
-/a/b/..//..

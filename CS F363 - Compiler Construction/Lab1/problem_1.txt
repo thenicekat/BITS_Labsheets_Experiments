@@ -1,0 +1,30 @@
+Problem 1(a):
+Input:
+4 // total no of states are 4
+0 //State 0 is the final state
+0 2 1
+1 3 0
+2 0 3
+3 1 2
+
+
+Input string:
+10110010-Accepted
+11001100- Accepted
+
+
+
+Problem 1(c)
+4 // total no of states are 4
+1 2 3 // state 1,2,3 are final
+0 1 0
+1 1 2
+2 3 1
+3 3 3
+
+Input String:
+
+1001100-Accepted
+
+
+

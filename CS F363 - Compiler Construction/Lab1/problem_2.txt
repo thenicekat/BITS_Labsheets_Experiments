@@ -1,0 +1,36 @@
+CASE 1:
+Input:
+5 // total no of states are 5
+3 // state 3 is final
+0 {0,1} {0}
+1 {2,3} {2}
+2 {4}	{4}
+3 {3}	{3}
+4 {1}	{1}
+
+Input string:
+01001 //Accepted
+1001101 //Accepted
+10101 //Not Accepted
+
+
+CASE 2:
+Input:
+
+7 // total no of states are 7
+5 6 // states 5 and 6 are final
+0 {1} {2}
+1 {3} {3}
+2 {4} {4}
+3 {3,5}	{3}
+4 {4} {4,6}
+5  {}	{}
+6  {}	{}
+
+Input string:
+001110 //Accepted
+10011 //Accepted
+01111 //Not Accepted
+
+
+

@@ -71,8 +71,6 @@ int main()
         }
     }
 
-    // We need to somehow get all possible state transitions
-
     cout << "::> Found the following state transitions: " << endl;
     for (int i = 0; i < numberOfStates; i++)
     {
@@ -87,6 +85,48 @@ int main()
             cout << "} ";
         }
         cout << endl;
+    }
+    cout << endl;
+
+    // We need to somehow get all epsilon closures
+    cout << "::> Epsilon Closures: " << endl;
+    vector<vector<int>> epsilonClosures;
+    for (int i = 0; i < numberOfStates; i++)
+    {
+        vector<int> perState;
+        cout << "::> State: " << i << " ";
+        // Map to keep track of visited states
+        map<int, int> mp;
+        // Queue for all possible states
+        queue<int> tq;
+        for (auto x : stateTransitions[i][2])
+        {
+            tq.push(x);
+        }
+        while (!tq.empty())
+        {
+            int currState = tq.front();
+            tq.pop();
+            mp[currState] = 1;
+
+            for (auto x : stateTransitions[currState][2])
+            {
+                if (!mp[x])
+                {
+                    tq.push(x);
+                }
+            }
+        }
+
+        cout << "{ ";
+        for (auto x : mp)
+        {
+            cout << x.first << ' ';
+            perState.push_back(x.first);
+        }
+        cout << "} ";
+        cout << endl;
+        epsilonClosures.push_back(perState);
     }
 
     queue<set<int>> q;
@@ -109,10 +149,23 @@ int main()
             for (auto y : stateTransitions[x][0])
             {
                 nextSet0.insert(y);
+                for (auto z : epsilonClosures[y])
+                {
+                    nextSet0.insert(z);
+                }
             }
             for (auto y : stateTransitions[x][1])
             {
                 nextSet1.insert(y);
+                for (auto z : epsilonClosures[y])
+                {
+                    nextSet1.insert(z);
+                }
+            }
+            for (auto z : epsilonClosures[x])
+            {
+                nextSet0.insert(z);
+                nextSet1.insert(z);
             }
         }
 

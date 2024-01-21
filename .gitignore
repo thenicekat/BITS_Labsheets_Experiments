@@ -1,5 +1,6 @@
 **/*.exe
 **/**/*.exe
+**/**/*.out
 
 CS_F303-Computer_Networks/mininet
 CS_F303-Computer_Networks/openflow

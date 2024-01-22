@@ -1,12 +1,8 @@
 #include <bits/stdc++.h>
+#define endl "\n"
 using namespace std;
 
-enum OP
-{
-    CONCAT,
-    OR,
-    KLEENE_STAR
-};
+int stateCounter = 0;
 
 class State
 {
@@ -18,6 +14,7 @@ public:
 
     State()
     {
+        number = stateCounter++;
         a = {};
         b = {};
         e = {};
@@ -32,33 +29,82 @@ public:
 
     StateSet()
     {
-        start = new State();
-        end = new State();
+        this->start = new State();
+        this->end = new State();
     }
 
     StateSet(char x)
     {
-        start = new State();
-        end = new State();
+        this->start = new State();
+        this->end = new State();
         if (x == 'a')
-            start->a.push_back(end);
+            this->start->a.push_back(this->end);
         if (x == 'b')
-            start->b.push_back(end);
+            this->start->b.push_back(this->end);
     }
 
-    void makeOR(StateSet *first, StateSet *second)
+    void OR(StateSet *first, StateSet *second)
     {
         // Make the Start -> first -> end loop
-        start->e.push_back(first->start);
-        first->end->e.push_back(end);
+        this->start->e.push_back(first->start);
+        first->end->e.push_back(this->end);
 
         // Make the Start -> second -> end loop
-        start->e.push_back(second->start);
-        second->end->e.push_back(end);
+        this->start->e.push_back(second->start);
+        second->end->e.push_back(this->end);
+    }
+
+    void CONCAT(StateSet *first, StateSet *second)
+    {
+        // Make the Start -> first
+        this->start->e.push_back(first->start);
+        // first -> second
+        first->end->e.push_back(second->start);
+        // second -> end
+        second->end->e.push_back(this->end);
+    }
+
+    void KLEENESTAR(StateSet *top)
+    {
+        // Start -> top.start
+        this->start->e.push_back(top->start);
+        // top.end -> start
+        top->end->e.push_back(this->start);
+        // start -> end
+        this->start->e.push_back(this->end);
+    }
+
+    void performBFS()
+    {
+        queue<State *> q;
+        map<int, int> mp;
+        q.push(this->start);
+
+        while (!q.empty())
+        {
+            State *curr = q.front();
+            q.pop();
+            mp[curr->number] = 1;
+            cout << "::> State Number: " << curr->number << endl;
+
+            for (auto x : curr->a)
+            {
+                if (!mp[x->number])
+                    q.push(x);
+            }
+            for (auto x : curr->b)
+            {
+                if (!mp[x->number])
+                    q.push(x);
+            }
+            for (auto x : curr->e)
+            {
+                if (!mp[x->number])
+                    q.push(x);
+            }
+        }
     }
 };
-
-State *startState = new State();
 
 // Function to return precedence of operators
 int prec(char c)
@@ -99,8 +145,7 @@ string infixToPostfix(string input)
         }
         else
         {
-            while (!s.empty() && prec(x) < prec(s.top()) ||
-                   !s.empty() && prec(x) == prec(s.top()))
+            while (!s.empty() && prec(x) < prec(s.top()) || !s.empty() && prec(x) == prec(s.top()))
             {
                 postfix += s.top();
                 s.pop();
@@ -120,7 +165,7 @@ string infixToPostfix(string input)
     return postfix;
 }
 
-void createNFA(string postfix)
+StateSet *createNFA(string postfix)
 {
     stack<StateSet *> s;
     for (auto x : postfix)
@@ -129,14 +174,45 @@ void createNFA(string postfix)
             s.push(new StateSet(x));
         else if (x == '|')
         {
+            cout << "::> Performing an OR" << endl;
             StateSet *first = s.top();
             s.pop();
             StateSet *second = s.top();
             s.pop();
             StateSet *final = new StateSet();
-            final->makeOR(first, second);
+            final->OR(first, second);
             s.push(final);
         }
+        else if (x == '.')
+        {
+            cout << "::> Performing a CONCAT" << endl;
+            StateSet *first = s.top();
+            s.pop();
+            StateSet *second = s.top();
+            s.pop();
+            StateSet *final = new StateSet();
+            final->CONCAT(first, second);
+            s.push(final);
+        }
+        else if (x == '*')
+        {
+            cout << "::> Performing a KLEENE STAR" << endl;
+            StateSet *top = s.top();
+            s.pop();
+            StateSet *final = new StateSet();
+            final->KLEENESTAR(top);
+            s.push(final);
+        }
+    }
+
+    if (s.empty() || s.size() > 1)
+    {
+        cout << "ERROR OCCURRED: Found " << s.size() << " elements." << endl;
+        return nullptr;
+    }
+    else
+    {
+        return s.top();
     }
 }
 
@@ -149,8 +225,11 @@ bool runTheModel(string regexp, string testcase)
     string postfix = infixToPostfix(regexp);
     cout << "Postfix: " << postfix << endl;
 
-    // Step 2:
-    createNFA(postfix);
+    // Step 2: Generate the State Set Structure
+    StateSet *output = createNFA(postfix);
+
+    // Step 3: Perform BFS on this structure
+    output->performBFS();
 
     return true;
 }
@@ -178,6 +257,8 @@ int main()
             cout << "Output: NO" << endl;
         }
 
+        cout << "::> Resetting State numbers" << endl;
+        stateCounter = 0;
         cout << "--------- END TEST CASE "
              << " ---------" << endl
              << endl;

@@ -1,6 +1,65 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+enum OP
+{
+    CONCAT,
+    OR,
+    KLEENE_STAR
+};
+
+class State
+{
+public:
+    int number;
+    vector<State *> a;
+    vector<State *> b;
+    vector<State *> e;
+
+    State()
+    {
+        a = {};
+        b = {};
+        e = {};
+    }
+};
+
+class StateSet
+{
+public:
+    State *start;
+    State *end;
+
+    StateSet()
+    {
+        start = new State();
+        end = new State();
+    }
+
+    StateSet(char x)
+    {
+        start = new State();
+        end = new State();
+        if (x == 'a')
+            start->a.push_back(end);
+        if (x == 'b')
+            start->b.push_back(end);
+    }
+
+    void makeOR(StateSet *first, StateSet *second)
+    {
+        // Make the Start -> first -> end loop
+        start->e.push_back(first->start);
+        first->end->e.push_back(end);
+
+        // Make the Start -> second -> end loop
+        start->e.push_back(second->start);
+        second->end->e.push_back(end);
+    }
+};
+
+State *startState = new State();
+
 // Function to return precedence of operators
 int prec(char c)
 {
@@ -57,7 +116,28 @@ string infixToPostfix(string input)
         s.pop();
     }
 
+    // Return the postfix expression
     return postfix;
+}
+
+void createNFA(string postfix)
+{
+    stack<StateSet *> s;
+    for (auto x : postfix)
+    {
+        if (x == 'a' || x == 'b')
+            s.push(new StateSet(x));
+        else if (x == '|')
+        {
+            StateSet *first = s.top();
+            s.pop();
+            StateSet *second = s.top();
+            s.pop();
+            StateSet *final = new StateSet();
+            final->makeOR(first, second);
+            s.push(final);
+        }
+    }
 }
 
 bool runTheModel(string regexp, string testcase)
@@ -70,6 +150,7 @@ bool runTheModel(string regexp, string testcase)
     cout << "Postfix: " << postfix << endl;
 
     // Step 2:
+    createNFA(postfix);
 
     return true;
 }

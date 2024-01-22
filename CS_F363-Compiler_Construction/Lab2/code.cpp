@@ -2,6 +2,7 @@
 #define endl "\n"
 using namespace std;
 
+// GLOBAL VARIABLES
 int stateCounter = 0;
 
 class State
@@ -74,35 +75,49 @@ public:
         this->start->e.push_back(this->end);
     }
 
-    void performBFS()
+    map<int, vector<vector<int>>> performBFS()
     {
+        // Map to keep track of all transitions
+        map<int, vector<vector<int>>> stateTransitions;
+        // Used to perform BFS and keep track of repetitive states
         queue<State *> q;
         map<int, int> mp;
+
         q.push(this->start);
+        mp[this->start->number] = 1;
 
         while (!q.empty())
         {
             State *curr = q.front();
             q.pop();
+
             mp[curr->number] = 1;
-            cout << "::> State Number: " << curr->number << endl;
+
+            // cout << "::> State Number: " << curr->number << endl;
+            // Initialize, corresponding to a | b | e
+            stateTransitions[curr->number] = {{}, {}, {}};
 
             for (auto x : curr->a)
             {
+                stateTransitions[curr->number][0].push_back(x->number);
                 if (!mp[x->number])
                     q.push(x);
             }
             for (auto x : curr->b)
             {
+                stateTransitions[curr->number][1].push_back(x->number);
                 if (!mp[x->number])
                     q.push(x);
             }
             for (auto x : curr->e)
             {
+                stateTransitions[curr->number][2].push_back(x->number);
                 if (!mp[x->number])
                     q.push(x);
             }
         }
+
+        return stateTransitions;
     }
 };
 
@@ -174,7 +189,7 @@ StateSet *createNFA(string postfix)
             s.push(new StateSet(x));
         else if (x == '|')
         {
-            cout << "::> Performing an OR" << endl;
+            cout << "::> Found an OR" << endl;
             StateSet *first = s.top();
             s.pop();
             StateSet *second = s.top();
@@ -185,7 +200,7 @@ StateSet *createNFA(string postfix)
         }
         else if (x == '.')
         {
-            cout << "::> Performing a CONCAT" << endl;
+            cout << "::> Found a CONCAT" << endl;
             StateSet *first = s.top();
             s.pop();
             StateSet *second = s.top();
@@ -196,7 +211,7 @@ StateSet *createNFA(string postfix)
         }
         else if (x == '*')
         {
-            cout << "::> Performing a KLEENE STAR" << endl;
+            cout << "::> Found a KLEENE STAR" << endl;
             StateSet *top = s.top();
             s.pop();
             StateSet *final = new StateSet();
@@ -229,7 +244,26 @@ bool runTheModel(string regexp, string testcase)
     StateSet *output = createNFA(postfix);
 
     // Step 3: Perform BFS on this structure
-    output->performBFS();
+    map<int, vector<vector<int>>> stateTransitions = output->performBFS();
+
+    // Step 4: Print the NFA with e transitions
+    cout << "::> Found the following NFA with e Transitions: " << endl;
+    for (int i = 0; i < stateTransitions.size(); i++)
+    {
+        cout << "::> State: " << i << " ";
+        for (auto x : stateTransitions[i])
+        {
+            cout << "{ ";
+            for (auto y : x)
+            {
+                cout << y << ' ';
+            }
+            cout << "} ";
+        }
+        cout << endl;
+    }
+
+    // Step 5: Convert NFA to DFA
 
     return true;
 }
@@ -237,6 +271,8 @@ bool runTheModel(string regexp, string testcase)
 int main()
 {
     freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+
     int counter;
     cin >> counter;
 

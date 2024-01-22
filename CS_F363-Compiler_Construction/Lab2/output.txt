@@ -1,0 +1,118 @@
+----------- TEST CASE 1 -----------
+Reg Exp. ((a).((a)|(b)))
+Testcase: ab
+Postfix: aab|.
+::> Found an OR
+::> Found a CONCAT
+::> Found the following NFA with e Transitions: 
+::> State: 0 { 1 } { } { } 
+::> State: 1 { } { } { 9 } 
+::> State: 2 { 3 } { } { } 
+::> State: 3 { } { } { 7 } 
+::> State: 4 { } { 5 } { } 
+::> State: 5 { } { } { 7 } 
+::> State: 6 { } { } { 4 2 } 
+::> State: 7 { } { } { 0 } 
+::> State: 8 { } { } { 6 } 
+::> State: 9 { } { } { } 
+Output: YES
+::> Resetting State numbers
+--------- END TEST CASE  ---------
+
+----------- TEST CASE 2 -----------
+Reg Exp. (((a).(((a)|(b))*)).((b).(a)))
+Testcase: abbaba
+Postfix: aab|*.ba..
+::> Found an OR
+::> Found a KLEENE STAR
+::> Found a CONCAT
+::> Found a CONCAT
+::> Found a CONCAT
+::> Found the following NFA with e Transitions: 
+::> State: 0 { 1 } { } { } 
+::> State: 1 { } { } { 11 } 
+::> State: 2 { 3 } { } { } 
+::> State: 3 { } { } { 7 } 
+::> State: 4 { } { 5 } { } 
+::> State: 5 { } { } { 7 } 
+::> State: 6 { } { } { 4 2 } 
+::> State: 7 { } { } { 8 } 
+::> State: 8 { } { } { 6 9 } 
+::> State: 9 { } { } { 0 } 
+::> State: 10 { } { } { 8 } 
+::> State: 11 { } { } { 19 } 
+::> State: 12 { } { 13 } { } 
+::> State: 13 { } { } { 17 } 
+::> State: 14 { 15 } { } { } 
+::> State: 15 { } { } { 12 } 
+::> State: 16 { } { } { 14 } 
+::> State: 17 { } { } { 10 } 
+::> State: 18 { } { } { 16 } 
+::> State: 19 { } { } { } 
+Output: YES
+::> Resetting State numbers
+--------- END TEST CASE  ---------
+
+----------- TEST CASE 3 -----------
+Reg Exp. (((a).((a).(b))*).((b).(a)))
+Testcase: abbaba
+Postfix: aab.*.ba..
+::> Found a CONCAT
+::> Found a KLEENE STAR
+::> Found a CONCAT
+::> Found a CONCAT
+::> Found a CONCAT
+::> Found the following NFA with e Transitions: 
+::> State: 0 { 1 } { } { } 
+::> State: 1 { } { } { 11 } 
+::> State: 2 { 3 } { } { } 
+::> State: 3 { } { } { 7 } 
+::> State: 4 { } { 5 } { } 
+::> State: 5 { } { } { 2 } 
+::> State: 6 { } { } { 4 } 
+::> State: 7 { } { } { 8 } 
+::> State: 8 { } { } { 6 9 } 
+::> State: 9 { } { } { 0 } 
+::> State: 10 { } { } { 8 } 
+::> State: 11 { } { } { 19 } 
+::> State: 12 { } { 13 } { } 
+::> State: 13 { } { } { 17 } 
+::> State: 14 { 15 } { } { } 
+::> State: 15 { } { } { 12 } 
+::> State: 16 { } { } { 14 } 
+::> State: 17 { } { } { 10 } 
+::> State: 18 { } { } { 16 } 
+::> State: 19 { } { } { } 
+Output: YES
+::> Resetting State numbers
+--------- END TEST CASE  ---------
+
+----------- TEST CASE 4 -----------
+Reg Exp. (((a).(((a).(b)))*).(b))
+Testcase: aababb
+Postfix: aab.*.b.
+::> Found a CONCAT
+::> Found a KLEENE STAR
+::> Found a CONCAT
+::> Found a CONCAT
+::> Found the following NFA with e Transitions: 
+::> State: 0 { 1 } { } { } 
+::> State: 1 { } { } { 11 } 
+::> State: 2 { 3 } { } { } 
+::> State: 3 { } { } { 7 } 
+::> State: 4 { } { 5 } { } 
+::> State: 5 { } { } { 2 } 
+::> State: 6 { } { } { 4 } 
+::> State: 7 { } { } { 8 } 
+::> State: 8 { } { } { 6 9 } 
+::> State: 9 { } { } { 0 } 
+::> State: 10 { } { } { 8 } 
+::> State: 11 { } { } { 15 } 
+::> State: 12 { } { 13 } { } 
+::> State: 13 { } { } { 10 } 
+::> State: 14 { } { } { 12 } 
+::> State: 15 { } { } { } 
+Output: YES
+::> Resetting State numbers
+--------- END TEST CASE  ---------
+

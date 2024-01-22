@@ -206,7 +206,7 @@ StateSet *createNFA(string postfix)
             StateSet *second = s.top();
             s.pop();
             StateSet *final = new StateSet();
-            final->CONCAT(first, second);
+            final->CONCAT(second, first);
             s.push(final);
         }
         else if (x == '*')
@@ -229,6 +229,139 @@ StateSet *createNFA(string postfix)
     {
         return s.top();
     }
+}
+
+void printSet(set<int> currentSet)
+{
+    cout << "[ ";
+    for (auto x : currentSet)
+    {
+        cout << x << ' ';
+    }
+    cout << "]";
+}
+
+void convertNFAtoDFA(map<int, vector<vector<int>>> stateTransitions)
+{
+    // We need to somehow get all epsilon closures
+    cout << endl
+         << "::> Epsilon Closures: " << endl;
+    vector<vector<int>> epsilonClosures;
+    for (int i = 0; i < stateTransitions.size(); i++)
+    {
+        vector<int> perState;
+        cout << "::> State: " << i << " ";
+        // Map to keep track of visited states
+        map<int, int> mp;
+        // Queue for all possible states
+        queue<int> tq;
+        for (auto x : stateTransitions[i][2])
+        {
+            tq.push(x);
+        }
+        while (!tq.empty())
+        {
+            int currState = tq.front();
+            tq.pop();
+            mp[currState] = 1;
+
+            for (auto x : stateTransitions[currState][2])
+            {
+                if (!mp[x])
+                {
+                    tq.push(x);
+                }
+            }
+        }
+
+        cout << "{ ";
+        for (auto x : mp)
+        {
+            cout << x.first << ' ';
+            perState.push_back(x.first);
+        }
+        cout << "} ";
+        cout << endl;
+        epsilonClosures.push_back(perState);
+    }
+
+    queue<set<int>> q;
+    map<set<int>, int> mp;
+
+    q.push({0});
+    mp[{0}] = 1;
+
+    cout << endl
+         << "::> Found the following DFA:" << endl;
+    while (!q.empty())
+    {
+        set<int> currentSet = q.front();
+        q.pop();
+
+        printSet(currentSet);
+
+        set<int> nextSet0, nextSet1;
+        for (auto x : currentSet)
+        {
+            for (auto y : stateTransitions[x][0])
+            {
+                nextSet0.insert(y);
+                for (auto z : epsilonClosures[y])
+                {
+                    nextSet0.insert(z);
+                }
+            }
+            for (auto y : stateTransitions[x][1])
+            {
+                nextSet1.insert(y);
+                for (auto z : epsilonClosures[y])
+                {
+                    nextSet1.insert(z);
+                }
+            }
+            for (auto z : epsilonClosures[x])
+            {
+                nextSet0.insert(z);
+                nextSet1.insert(z);
+            }
+        }
+
+        cout << " ";
+        printSet(nextSet0);
+        cout << " ";
+        printSet(nextSet1);
+        cout << "\n";
+
+        if (mp.find(nextSet0) == mp.end())
+        {
+            q.push(nextSet0);
+            mp[nextSet0] = 1;
+        }
+        if (mp.find(nextSet1) == mp.end())
+        {
+            q.push(nextSet1);
+            mp[nextSet1] = 1;
+        }
+    }
+
+    // cout << "Final States: " << endl;
+    // for (auto x : mp)
+    // {
+    //     int isFinalState = 0;
+    //     for (auto v : x.first)
+    //     {
+    //         if (finalStates[v])
+    //         {
+    //             isFinalState = 1;
+    //         }
+    //     }
+
+    //     if (isFinalState)
+    //     {
+    //         printSet(x.first);
+    //         cout << endl;
+    //     }
+    // }
 }
 
 bool runTheModel(string regexp, string testcase)
@@ -264,6 +397,7 @@ bool runTheModel(string regexp, string testcase)
     }
 
     // Step 5: Convert NFA to DFA
+    convertNFAtoDFA(stateTransitions);
 
     return true;
 }
@@ -278,7 +412,7 @@ int main()
 
     for (int m = 0; m < counter; m++)
     {
-        cout << "----------- TEST CASE " << m + 1 << " -----------" << endl;
+        cout << "--------------------- TEST CASE " << m + 1 << " -----------------------" << endl;
 
         string re;
         string input;
@@ -295,8 +429,8 @@ int main()
 
         cout << "::> Resetting State numbers" << endl;
         stateCounter = 0;
-        cout << "--------- END TEST CASE "
-             << " ---------" << endl
+        cout << "--------------------- END TEST CASE "
+             << " ---------------------" << endl
              << endl;
     }
 }

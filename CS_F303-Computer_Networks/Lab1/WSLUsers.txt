@@ -1,0 +1,44 @@
+For WSL2, you would need to recompile your kernel from scratch
+
+Step 1: Recompile Kernel
+- git clone https://github.com/microsoft/WSL2-Linux-Kernel
+- cd WSL2-Linux-Kernel
+- cp Microsoft/config-wsl .config
+- sudo apt update
+- sudo apt install cmake libncurses-dev flex bison libboost-all-dev openssl libspdlog-dev build-essential libssl-dev libelf-dev dwarves
+- make menuconfig
+
+Step 2: Choose the options required for the new kernel
+- General-setup -> Local version - append to kernel release
+- Networking support -> Networking options -> 802.1d Ethernet Bridging
+- Networking support -> Networking options -> QoS and/or fair queueing -> (Everything)
+- Networking support -> Networking options -> Open vSwitch
+
+Step 3: Compile the kernel and copy it to C drive
+- make
+- cp arch/x86/boot/bzImage /mnt/c/
+
+Step 4: Link it with WSL2's wslconfig
+- https://learn.microsoft.com/en-us/windows/wsl/wsl-config
+- Make a file in C/users/name called .wslconfig
+```
+[wsl2]
+kernel=X:\\Users\\<username>\\Path\\to\\bzimage
+```
+
+Step 5: Restart wsl
+- wsl --shutdown
+- wsl
+
+Step 6: Install Modules
+- cd WSL2-Linux-Kernel
+- sudo make modules_install
+
+Step 7: Install Mininet
+- cd ~
+- git clone https://github.com/mininet/mininet
+- sudo PYTHON=python3 mininet/util/install.sh -a
+
+Step 8: Run these lines everytime WSL restarts\
+- sudo modprobe -a openvswitch sch_htb sch_netem sch_hfsc sch_tbf sch_red
+- sudo /etc/init.d/openvswitch-switch start

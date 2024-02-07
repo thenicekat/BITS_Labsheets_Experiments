@@ -241,11 +241,12 @@ void printSet(set<int> currentSet)
     cout << "]";
 }
 
-void convertNFAtoDFA(map<int, vector<vector<int>>> stateTransitions)
+map<char, vector<char>> convertNFAtoDFA(map<char, int> &finalStates, map<int, vector<vector<int>>> stateTransitions)
 {
     // We need to somehow get all epsilon closures
     cout << endl
          << "::> Epsilon Closures: " << endl;
+
     vector<vector<int>> epsilonClosures;
     for (int i = 0; i < stateTransitions.size(); i++)
     {
@@ -286,21 +287,24 @@ void convertNFAtoDFA(map<int, vector<vector<int>>> stateTransitions)
     }
 
     queue<set<int>> q;
-    map<set<int>, int> mp;
+    map<set<int>, int> mapOfStatesVisited;
 
+    char stateLetter = 'A';
     q.push({0});
-    mp[{0}] = 1;
+    mapOfStatesVisited[{0}] = stateLetter++;
+
+    map<char, vector<char>> theResultantDFA;
 
     cout << endl
          << "::> Found the following DFA:" << endl;
+
     while (!q.empty())
     {
         set<int> currentSet = q.front();
         q.pop();
 
-        printSet(currentSet);
-
-        set<int> nextSet0, nextSet1;
+        set<int>
+            nextSet0, nextSet1;
         for (auto x : currentSet)
         {
             for (auto y : stateTransitions[x][0])
@@ -319,49 +323,83 @@ void convertNFAtoDFA(map<int, vector<vector<int>>> stateTransitions)
                     nextSet1.insert(z);
                 }
             }
-            for (auto z : epsilonClosures[x])
+        }
+
+        if (mapOfStatesVisited.find(nextSet0) == mapOfStatesVisited.end())
+        {
+            q.push(nextSet0);
+            mapOfStatesVisited[nextSet0] = stateLetter++;
+        }
+        if (mapOfStatesVisited.find(nextSet1) == mapOfStatesVisited.end())
+        {
+            q.push(nextSet1);
+            mapOfStatesVisited[nextSet1] = stateLetter++;
+        }
+
+        // Printing the DFA
+        // printSet(currentSet);
+        // cout << " ";
+        // printSet(nextSet0);
+        // cout << " ";
+        // printSet(nextSet1);
+        // cout << endl;
+
+        theResultantDFA[(char)mapOfStatesVisited[currentSet]] = {
+            (char)mapOfStatesVisited[nextSet0],
+            (char)mapOfStatesVisited[nextSet1]};
+    }
+
+    for (auto x : mapOfStatesVisited)
+    {
+        int isFinalState = 0;
+        for (auto v : x.first)
+        {
+            if (v == stateCounter - 1)
             {
-                nextSet0.insert(z);
-                nextSet1.insert(z);
+                isFinalState = 1;
             }
         }
 
-        cout << " ";
-        printSet(nextSet0);
-        cout << " ";
-        printSet(nextSet1);
-        cout << "\n";
-
-        if (mp.find(nextSet0) == mp.end())
+        if (isFinalState)
         {
-            q.push(nextSet0);
-            mp[nextSet0] = 1;
-        }
-        if (mp.find(nextSet1) == mp.end())
-        {
-            q.push(nextSet1);
-            mp[nextSet1] = 1;
+            finalStates[(char)mapOfStatesVisited[x.first]] = 1;
         }
     }
 
-    // cout << "Final States: " << endl;
-    // for (auto x : mp)
-    // {
-    //     int isFinalState = 0;
-    //     for (auto v : x.first)
-    //     {
-    //         if (finalStates[v])
-    //         {
-    //             isFinalState = 1;
-    //         }
-    //     }
+    return theResultantDFA;
+}
 
-    //     if (isFinalState)
-    //     {
-    //         printSet(x.first);
-    //         cout << endl;
-    //     }
-    // }
+bool runStringOnDFA(string input, map<char, int> finalStates, map<char, vector<char>> theResultantDFA)
+{
+    // Print the DFA
+    for (auto x : theResultantDFA)
+    {
+        cout << x.first << ' ';
+        for (auto y : theResultantDFA[x.first])
+        {
+            cout << y << ' ';
+        }
+        cout << endl;
+    }
+    char currentState = 'A';
+    cout << "::> Flow: ";
+    for (int i = 0; i < input.length(); i++)
+    {
+        cout << "->" << currentState;
+        int currentChar = input[i] - 'a';
+        currentState = theResultantDFA[currentState][currentChar];
+    }
+    cout << "->" << currentState;
+    cout << endl;
+
+    if (finalStates[currentState])
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool runTheModel(string regexp, string testcase)
@@ -397,9 +435,14 @@ bool runTheModel(string regexp, string testcase)
     }
 
     // Step 5: Convert NFA to DFA
-    convertNFAtoDFA(stateTransitions);
+    map<char, int> finalStates;
+    map<char, vector<char>>
+        theResultantDFA = convertNFAtoDFA(finalStates, stateTransitions);
 
-    return true;
+    // Step 6: Run string on DFA
+    bool res = runStringOnDFA(testcase, finalStates, theResultantDFA);
+
+    return res;
 }
 
 int main()
@@ -414,11 +457,20 @@ int main()
     {
         cout << "--------------------- TEST CASE " << m + 1 << " -----------------------" << endl;
 
-        string re;
-        string input;
-        cin >> re >> input;
+        // Input parameters
+        string regex, input;
+        cin >> regex >> input;
 
-        if (runTheModel(re, input))
+        // We have to add a . everytime we see a )(
+        for (int i = 1; i < regex.size(); i++)
+        {
+            if (regex[i] == '(' && regex[i - 1] == ')')
+            {
+                regex = regex.substr(0, i) + "." + regex.substr(i, regex.size() - i);
+            }
+        }
+
+        if (runTheModel(regex, input))
         {
             cout << "Output: YES" << endl;
         }

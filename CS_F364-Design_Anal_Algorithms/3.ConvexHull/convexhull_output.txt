@@ -1,0 +1,11 @@
+----------- TEST CASE 1 -----------
+::> Reading 6 number of coordinates.
+::> Finding points with least x coordinate and max x coordinate.
+::> P_min: 2,5
+::> P_max: 6,3
+::> Set T - which contains all the points between x(pmin) and x(pmax): 
+::> 3,3
+::> 4,3
+::> 4,4
+::> Running upper hull
+--------- END TEST CASE  ---------

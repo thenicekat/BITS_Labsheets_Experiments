@@ -8,4 +8,22 @@
 ::> 4,3
 ::> 4,4
 ::> Running upper hull
+::> Calling the upper bridge function
+::> Printing all the pairs in arbitrarily chosen pairs such that x coordinates are in increasing order
+::> (2,5) (3,3)
+::> (4,3) (4,4)
+::> Slope Found: -2
+::> Median Slope: -2
+::> Max Intercept: 15
+::> Point on Max Intercept Line: 6,3
+::> Calling the upper bridge function
+::> Printing all the pairs in arbitrarily chosen pairs such that x coordinates are in increasing order
+::> (3,3) (4,4)
+::> Slope Found: 1
+::> Median Slope: 1
+::> Max Intercept: 0
+::> Point on Max Intercept Line: 3,3
+::> Point on Max Intercept Line: 4,4
+::> Calling the upper bridge function
+::> Found Upper Bridge: 6,3->4,4
 --------- END TEST CASE  ---------

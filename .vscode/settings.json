@@ -38,10 +38,13 @@
         "leapc.h": "c",
         "xstring": "cpp",
         "string": "cpp",
+        "*.asm": "mips",
         "new": "cpp",
         "array": "cpp",
         "string_view": "cpp",
         "initializer_list": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "bitset": "cpp",
+        "set": "cpp"
     }
 }

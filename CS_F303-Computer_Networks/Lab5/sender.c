@@ -34,6 +34,7 @@ int main()
     // Connect to the server
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR connecting");
+    printf("Connected to the server\n");
 
     // Number of frames to be sent
     int n;
@@ -43,6 +44,13 @@ int main()
     // Send frames
     for (int i = 0; i < n; i++)
     {
+        if (rand() % 3 == 0)
+        {
+            printf("Dropping Frame %d\n", i);
+            continue;
+        }
+
+        // Send frame
         printf("Sending frame %d\n", i);
         sprintf(buffer, "Frame %d", i);
         write(sockfd, buffer, strlen(buffer));
@@ -50,7 +58,10 @@ int main()
         // Wait for acknowledgment
         bzero(buffer, MAX_FRAME_SIZE);
         read(sockfd, buffer, MAX_FRAME_SIZE);
-        printf("Received acknowledgment from receiver: %s\n", buffer);
+
+        int ack_frame;
+        sscanf(buffer, "ACK %d", &ack_frame);
+        printf("Received acknowledgment from receiver: %d\n", ack_frame);
     }
 
     // Send exit signal

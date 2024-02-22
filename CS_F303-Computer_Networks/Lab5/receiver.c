@@ -35,10 +35,12 @@ int main()
     // Bind socket
     if (bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");
+    printf("BINDING done on port %d\n", PORT);
 
     // Listen for connections
     listen(sockfd, 5);
     clilen = sizeof(cli_addr);
+    printf("Listening for connections...\n");
 
     // Accept incoming connection
     newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
@@ -54,13 +56,14 @@ int main()
             break;
 
         printf("Received frame: %s\n", buffer);
+
+        /// get frame
+        int frame;
+        sscanf(buffer, "Frame %d", &frame);
+
         // Send acknowledgment
-        int n = rand() % 2;
-        if (n == 1)
-        {
-            strcpy(buffer, "ACK");
-            write(newsockfd, buffer, strlen(buffer));
-        }
+        sprintf(buffer, "ACK %d", frame);
+        write(newsockfd, buffer, strlen(buffer));
     }
 
     close(newsockfd);

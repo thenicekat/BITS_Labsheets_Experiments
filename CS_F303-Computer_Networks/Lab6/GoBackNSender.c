@@ -9,10 +9,10 @@
 
 #define W 5
 
-char received[10];
+char message[10];
 char timeout[10];
 
-void integerToString(int z)
+void convertIntToStr(int z)
 {
     int k, i = 0, j, g;
     k = z;
@@ -26,61 +26,62 @@ void integerToString(int z)
     while (z > 0)
     {
         k = z % 10;
-        received[i] = k + 48;
+        message[i] = k + 48;
         i--;
         z = z / 10;
     }
-    received[g] = '\0';
+    message[g] = '\0';
 }
 
 int main()
 {
-    int frames, windowLength, current = 1, i = 0, n, p = 0, e = 0;
-
-    int connection = socket(AF_INET, SOCK_STREAM, 0);
+    int framesToSend, windowLength, current = 1, i = 0, j, p = 0, e = 0;
 
     struct sockaddr_in server;
+    int s = socket(AF_INET, SOCK_STREAM, 0);
+
     server.sin_family = AF_INET;
     server.sin_port = 6500;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_addr.s_addr = inet_addr("10.0.0.2");
 
-    connect(connection, (struct sockaddr *)&server, sizeof(server));
+    connect(s, (struct sockaddr *)&server, sizeof(server));
 
     printf("\nTCP Connection Established.\n");
     printf("\nEnter the number of Frames: ");
-    scanf("%d", &frames);
+    scanf("%d", &framesToSend);
 
-    integerToString(frames);
-    send(connection, received, sizeof(received), 0);
+    convertIntToStr(framesToSend);
+
+    // Send the number of frames first
+    send(s, message, sizeof(message), 0);
     strcpy(timeout, "Time Out ");
 
     while (1)
     {
-        // First we sent all the frames in the window W
         for (i = 0; i < W; i++)
         {
-            integerToString(current);
-            send(connection, received, sizeof(received), 0);
-            if (current <= frames)
+            convertIntToStr(current);
+            send(s, message, sizeof(message), 0);
+            if (current <= framesToSend)
             {
                 printf("\nFrame %d Sent", current);
                 current++;
             }
         }
 
-        // We reset all the counters and wait for the acknowledgement
         i = 0;
         windowLength = W;
 
         while (i < W)
         {
-            recv(connection, received, sizeof(received), 0);
-            p = atoi(received);
+            recv(s, message, sizeof(message), 0);
+            p = atoi(message);
+            printf("\n::> Current: %d Window Length: %d, Received: %d", current, windowLength, p);
 
-            if (strcmp(received, timeout) == 0)
+            if (strcmp(message, timeout) == 0)
             {
                 e = current - windowLength;
-                if (e < frames)
+                if (e < framesToSend)
                 {
                     printf("\nTime Out, Resent Frame %d onwards", e);
                 }
@@ -88,9 +89,9 @@ int main()
             }
             else
             {
-                if (p <= frames)
+                if (p <= framesToSend)
                 {
-                    printf("\nFrame %s Acknowledged", received);
+                    printf("\nFrame %s Acknowledged", message);
                     windowLength--;
                 }
                 else
@@ -98,15 +99,17 @@ int main()
                     break;
                 }
             }
-            if (p > frames)
+
+            if (p > framesToSend)
             {
                 break;
             }
             i++;
         }
-        if (windowLength == 0 && current > frames)
+
+        if (windowLength == 0 && current > framesToSend)
         {
-            send(connection, timeout, sizeof(timeout), 0);
+            send(s, timeout, sizeof(timeout), 0);
             break;
         }
         else
@@ -115,6 +118,6 @@ int main()
             windowLength = W;
         }
     }
-    close(connection);
+    close(s);
     return 0;
 }

@@ -12,7 +12,7 @@
 char a[10];
 char b[10];
 
-void numberToString(int z)
+void convertIntToString(int z)
 {
     int k, i = 0, j, g;
     k = z;
@@ -33,7 +33,7 @@ void numberToString(int z)
     a[g] = '\0';
 }
 
-int con()
+int stringToInteger()
 {
     char k[9];
     int i = 1;
@@ -49,53 +49,54 @@ int con()
 
 int main()
 {
-    int connection;
-    int f, wl, c = 1, x, i = 0, j, n, p = 0, e = 0;
-    struct sockaddr_in server;
+    int s, f, wl, c = 1, i = 0, j, p = 0, e = 0;
 
-    connection = socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in ser;
 
-    server.sin_family = AF_INET;
-    server.sin_port = 6500;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    s = socket(AF_INET, SOCK_STREAM, 0);
 
-    connect(connection, (struct sockaddr *)&server, sizeof(server));
+    ser.sin_family = AF_INET;
+    ser.sin_port = 6500;
+    ser.sin_addr.s_addr = inet_addr("10.0.0.2");
 
+    connect(s, (struct sockaddr *)&ser, sizeof(ser));
     printf("\nTCP Connection Established.\n");
     printf("\nEnter the number of Frames: ");
-
     scanf("%d", &f);
 
-    numberToString(f);
+    convertIntToString(f);
 
-    send(connection, a, sizeof(a), 0);
+    send(s, a, sizeof(a), 0);
+
     strcpy(b, "Time Out ");
 
     while (1)
     {
         for (i = 0; i < W; i++)
         {
-            numberToString(c);
-            send(connection, a, sizeof(a), 0);
+            convertIntToString(c);
+            send(s, a, sizeof(a), 0);
             if (c <= f)
             {
                 printf("\nFrame %d Sent", c);
                 c++;
             }
         }
+
         i = 0;
         wl = W;
+
         while (i < W)
         {
-            recv(connection, a, sizeof(a), 0);
+            recv(s, a, sizeof(a), 0);
             p = atoi(a);
             if (a[0] == 'N')
             {
-                e = con();
+                e = stringToInteger();
                 if (e < f)
                 {
                     printf("\nNAK %d", e);
-                    printf("\nFrame %d sent", e);
+                    printf("\nFrame %d resent", e);
                     i--;
                 }
             }
@@ -111,15 +112,17 @@ int main()
                     break;
                 }
             }
+
             if (p > f)
             {
                 break;
             }
             i++;
         }
+
         if (wl == 0 && c > f)
         {
-            send(connection, b, sizeof(b), 0);
+            send(s, b, sizeof(b), 0);
             break;
         }
         else
@@ -128,6 +131,6 @@ int main()
             wl = W;
         }
     }
-    close(connection);
+    close(s);
     return 0;
 }

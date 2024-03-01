@@ -15,10 +15,9 @@
 char a[10];
 char b[10];
 
-void integerToStringA(int z)
+void convertToString(int z)
 {
-    // this converts integer to string
-    int k, i = 0, g;
+    int k, i = 0, j, g;
     k = z;
     while (k > 0)
     {
@@ -37,10 +36,9 @@ void integerToStringA(int z)
     a[g] = '\0';
 }
 
-void integerToStringB(int z)
+void NconvertToString(int z)
 {
-    // this converts integer to string
-    int k, i = 0, g;
+    int k, i = 1, j, g;
     k = z;
     b[0] = 'N';
     while (k > 0)
@@ -62,77 +60,66 @@ void integerToStringB(int z)
 
 int main()
 {
-    struct sockaddr_in server, client;
-
-    int server_socket, n, accepted_conn, i, current = 1, frames;
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
-
-    server.sin_family = AF_INET;
-    server.sin_port = 6500;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-    bind(server_socket, (struct sockaddr *)&server, sizeof(server));
-    listen(server_socket, 1);
-
-    n = sizeof(client);
-
-    accepted_conn = accept(server_socket, (struct sockaddr *)&client, &n);
-
+    struct sockaddr_in ser, cli;
+    int s, n, sock, i, j, c = 1, f;
+    unsigned int s1;
+    s = socket(AF_INET, SOCK_STREAM, 0);
+    ser.sin_family = AF_INET;
+    ser.sin_port = 6500;
+    ser.sin_addr.s_addr = inet_addr("10.0.0.2");
+    bind(s, (struct sockaddr *)&ser, sizeof(ser));
+    listen(s, 1);
+    n = sizeof(cli);
+    sock = accept(s, (struct sockaddr *)&cli, &n);
     printf("\nTCP Connection Established.\n");
+    s1 = (unsigned int)time(NULL);
+    srand(s1);
     strcpy(b, "Time Out ");
-
-    recv(accepted_conn, a, sizeof(a), 0);
-    frames = atoi(a);
-
+    recv(sock, a, sizeof(a), 0);
+    f = atoi(a);
     while (1)
     {
         for (i = 0; i < W; i++)
         {
-            recv(accepted_conn, a, sizeof(a), 0);
+            recv(sock, a, sizeof(a), 0);
             if (strcmp(a, b) == 0)
             {
                 break;
             }
         }
-
         i = 0;
         while (i < W)
         {
-        // Randomly send timeout
         L:
-            if (rand() % P1 <= P2)
+            j = rand() % P1;
+            if (j < P2)
             {
-                integerToStringB(current);
-                send(accepted_conn, b, sizeof(b), 0);
+                NconvertToString(c);
+                send(sock, b, sizeof(b), 0);
                 goto L;
             }
             else
             {
-                // Otherwise, send acknowledgement frame
-                integerToStringA(current);
-                if (current <= frames)
+                convertToString(c);
+                if (c <= f)
                 {
-                    if (current == frames)
-                    {
-                        printf("\nFrame %d received", current);
-                    }
                     printf("\nFrame %s Received ", a);
-                    send(accepted_conn, a, sizeof(a), 0);
+                    send(sock, a, sizeof(a), 0);
                 }
                 else
                 {
                     break;
                 }
-                current++;
+                c++;
             }
-            if (current > frames)
+            if (c > f)
             {
                 break;
             }
+            i++;
         }
     }
-
-    close(accepted_conn);
-    close(server_socket);
+    close(sock);
+    close(s);
     return 0;
 }

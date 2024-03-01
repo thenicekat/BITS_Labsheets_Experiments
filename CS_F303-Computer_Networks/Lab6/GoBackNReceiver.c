@@ -9,16 +9,16 @@
 #include <arpa/inet.h>
 
 #define W 5
-#define P1 50
-#define P2 10
+
+#define P1 100
+#define P2 20
 
 char a[10];
-char b[10];
+char timeout[10];
 
-void integerToString(int z)
+void convertIntToStr(int z)
 {
-    // this converts integer to string
-    int k, i = 0, g;
+    int k, i = 0, j, g;
     k = z;
     while (k > 0)
     {
@@ -40,33 +40,34 @@ void integerToString(int z)
 int main()
 {
     struct sockaddr_in server, client;
+    int n, sock, i, j, c = 1, framesToReceive;
 
-    int server_socket, n, accepted_conn, i, current = 1, frames;
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
-
+    int s = socket(AF_INET, SOCK_STREAM, 0);
     server.sin_family = AF_INET;
     server.sin_port = 6500;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server.sin_addr.s_addr = inet_addr("10.0.0.2");
 
-    bind(server_socket, (struct sockaddr *)&server, sizeof(server));
-    listen(server_socket, 1);
-
+    bind(s, (struct sockaddr *)&server, sizeof(server));
+    listen(s, 1);
     n = sizeof(client);
-
-    accepted_conn = accept(server_socket, (struct sockaddr *)&client, &n);
+    sock = accept(s, (struct sockaddr *)&client, &n);
 
     printf("\nTCP Connection Established.\n");
-    strcpy(b, "Time Out ");
 
-    recv(accepted_conn, a, sizeof(a), 0);
-    frames = atoi(a);
+    unsigned int s1 = (unsigned int)time(NULL);
+    srand(s1);
+    strcpy(timeout, "Time Out ");
+
+    recv(sock, a, sizeof(a), 0);
+    framesToReceive = atoi(a);
+    printf("\nThe total number frames yet to come is %d", framesToReceive);
 
     while (1)
     {
         for (i = 0; i < W; i++)
         {
-            recv(accepted_conn, a, sizeof(a), 0);
-            if (strcmp(a, b) == 0)
+            recv(sock, a, sizeof(a), 0);
+            if (strcmp(a, timeout) == 0)
             {
                 break;
             }
@@ -75,39 +76,42 @@ int main()
         i = 0;
         while (i < W)
         {
-            // Randomly send timeout
-            if (rand() % P1 <= P2)
+            j = rand() % P1;
+            if (j <= P2)
             {
-                send(accepted_conn, b, sizeof(b), 0);
+                send(sock, timeout, sizeof(timeout), 0);
                 break;
             }
             else
             {
-                // Otherwise, send acknowledgement frame
-                integerToString(current);
-                if (current <= frames)
+                convertIntToStr(c);
+                // if current <= frames to send
+                if (c <= framesToReceive)
                 {
-                    if (current == frames)
+                    if (c == framesToReceive)
                     {
-                        printf("\nFrame %d received", current);
+                        printf("\nFrame %d received", c);
                     }
                     printf("\nFrame %s Received ", a);
-                    send(accepted_conn, a, sizeof(a), 0);
+                    send(sock, a, sizeof(a), 0);
                 }
                 else
                 {
                     break;
                 }
-                current++;
+                c++;
             }
-            if (current > frames)
+
+            if (c > framesToReceive)
             {
                 break;
             }
+            i++;
         }
     }
 
-    close(accepted_conn);
-    close(server_socket);
+    close(sock);
+    close(s);
+
     return 0;
 }

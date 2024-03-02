@@ -1,0 +1,1 @@
+yacc -d asbs.y && flex asbs.l && gcc y.tab.c lex.yy.c -ll && ./a.out

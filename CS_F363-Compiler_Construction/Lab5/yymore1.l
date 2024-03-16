@@ -1,6 +1,7 @@
 %%
-a ECHO; yymore();
-b ECHO;
+a { printf("\nFound a "); yymore(); ECHO; printf(" yytext: %s", yytext);}
+ab { printf("\nFound ab "); ECHO; printf(" yytext: %s", yytext); }
+b { printf("\nFound b "); ECHO; printf(" yytext: %s", yytext); }
 %%
 main(){
     yylex();

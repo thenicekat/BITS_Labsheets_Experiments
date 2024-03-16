@@ -1,7 +1,12 @@
 %%
-foobar printf("\n"); ECHO; yyless(2);
+abcd printf("\n"); ECHO; yyless(1);
+bcd printf("\n"); ECHO; yyless(4);
+cd printf("\n"); ECHO; yyless(2);
+. { 
+    printf("\nEchoing Character: %c", *yytext);
+}
 %%
-main(){
+int main(){
     yylex();
     return 0;
     // yyless(): trim characters from yytext and puts them back on stdin.

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 %}
 
-%token ID DUMMY ADD MUL LBRA RBRA NL
+%token ID ADD MUL LBRA RBRA NL
 
 %%
 FINAL: E NL {printf("Valid statement\n"); return 1;}

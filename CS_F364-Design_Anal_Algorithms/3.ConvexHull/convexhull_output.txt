@@ -18,30 +18,6 @@
 ::> Point on Max Intercept Line: 0,4
 ::> Point on Max Intercept Line: 4,4
 ::> Found Upper Bridge: 0,4->4,4
-::> Finding points with least x coordinate and max x coordinate.
-::> P_min: 0,0
-::> P_max: 4,0
-::> Set T - which contains all the points between x(pmin) and x(pmax): 
-::> 2,2
-::> 3,3
-::> Running lower hull
-::> Calling the lower bridge function
+::> Running upper hull
+::> Calling the upper bridge function
 ::> Printing all the pairs in arbitrarily chosen pairs such that x coordinates are in increasing order
-::> (0,0) (2,2)
-::> (3,3) (4,0)
-::> Slope Found: 1
-::> Slope Found: -3
-::> Median Slope: -1
-::> Min Intercept: 0
-::> Point on Min Intercept Line: 0,0
-::> Calling the lower bridge function
-::> Printing all the pairs in arbitrarily chosen pairs such that x coordinates are in increasing order
-::> (0,0) (2,2)
-::> Slope Found: 1
-::> Median Slope: 1
-::> Min Intercept: 0
-::> Point on Min Intercept Line: 0,0
-::> Point on Min Intercept Line: 2,2
-::> Point on Min Intercept Line: 3,3
-::> Found Lower Bridge: 0,0->3,3
---------- END TEST CASE  ---------

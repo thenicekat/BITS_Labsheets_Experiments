@@ -384,9 +384,35 @@ void upperhull(pair<int, int> pmin, pair<int, int> pmax, vector<pair<int, int>> 
     }
     // Find median
     float median_x_coord = find_median(all_x_coords);
+
     // find the upper bridge line
     vector<pair<int, int>> upper_bridge = upperbridge(vertices, median_x_coord);
+    pair<int, int> pl = upper_bridge[0];
+    pair<int, int> pr = upper_bridge[1];
+
     cout << "::> Found Upper Bridge: " << upper_bridge[0].first << "," << upper_bridge[0].second << "->" << upper_bridge[1].first << "," << upper_bridge[1].second << endl;
+
+    // We need to find Tmin and Tmax
+    // Tleft := {pl} U all the points of Tleft to the left of the line through pmin and pl;
+    // Tright := {pr} U all the points of Tright to the right of the line through pr and pmax;
+    vector<pair<int, int>> Tleft;
+    Tleft.push_back(pl);
+    vector<pair<int, int>> Tright;
+    Tright.push_back(pr);
+    for (auto vertice : vertices)
+    {
+        if ((pr.first - pl.first) * (vertice.second - pl.second) - (pr.second - pl.second) * (vertice.first - pl.first) > 0)
+        {
+            Tleft.push_back(vertice);
+        }
+        if ((pr.first - pl.first) * (vertice.second - pl.second) - (pr.second - pl.second) * (vertice.first - pl.first) < 0)
+        {
+            Tright.push_back(vertice);
+        }
+    }
+
+    upperhull(pmin, pl, Tleft);
+    upperhull(pr, pmax, Tright);
 }
 
 void lowerhull(pair<int, int> pmin, pair<int, int> pmax, vector<pair<int, int>> vertices)
